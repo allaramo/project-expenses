@@ -1,0 +1,14 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="categories.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let category of categories">
+    <mat-expansion-panel-header>
+      {{ category.name }}
+    </mat-expansion-panel-header>
+    <p>{{ category.name }}</p>
+    <mat-action-row>
+      <a mat-button color="primary" [routerLink]="['/edit', category.id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(category.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text mat-body-1" *ngIf="categories.length<=0 && !isLoading">No Categories Found</p>
