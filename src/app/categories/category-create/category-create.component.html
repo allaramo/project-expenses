@@ -15,9 +15,22 @@
       #name="ngModel">
       <mat-error >Please enter a name</mat-error>
     </mat-form-field>
-    <button
-    mat-raised-button
-    color="primary"
-    type="submit">Save</button>
+    <mat-form-field>
+      <input
+      type="text"
+      matInput
+      name="description"
+      required
+      placeholder="Description"
+      [ngModel]="category?.description"
+      #name="ngModel">
+      <mat-error >Please enter a description</mat-error>
+    </mat-form-field>
+    <mat-action-row>
+      <button
+      mat-stroked-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon>Save</button>
+  </mat-action-row>
   </form>
 </mat-card>

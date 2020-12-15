@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class CategoryServices {
   private categories : Category[] = [];
   private categoriesUpdated = new Subject<Category[]>();
-  private url = 'http://localhost:3000/category';
+  private url = 'http://localhost:3000/category/';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -19,7 +19,8 @@ export class CategoryServices {
       return data.categories.map(category =>{
         return {
           id: category._id,
-          name: category.name
+          name: category.name,
+          description: category.description
         }
       });
     }))
@@ -34,11 +35,11 @@ export class CategoryServices {
   }
 
   getOne(id: string){
-    return this.http.get<{_id: string, name: string}>(this.url + id)
+    return this.http.get<{_id: string, name: string, description: string}>(this.url + id)
   }
 
-  add(name: string){
-      const category : Category = {id: null, name: name};
+  add(name: string, description: string){
+      const category : Category = {id: null, name: name, description: description};
       this.http.post<{msg: string, id: string}>(this.url, category)
       .subscribe(res=>{
         category.id = res.id;
@@ -48,8 +49,8 @@ export class CategoryServices {
       });
   }
 
-  update(id: string, name: string){
-    const category : Category = {id: id, name: name};
+  update(id: string, name: string, description: string){
+    const category : Category = {id: id, name: name, description: description};
     this.http.put(this.url + id, category)
     .subscribe(res=>{
       const updated = [...this.categories];
@@ -64,7 +65,7 @@ export class CategoryServices {
   delete(id : string){
     this.http.delete(this.url + id)
     .subscribe(()=>{
-      const updated = this.categories.filter(cat => cat.id !== cat.id);
+      const updated = this.categories.filter(cat => cat.id !== id);
       this.categories = updated;
       this.categoriesUpdated.next([...this.categories]);
     });

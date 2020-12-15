@@ -24,7 +24,8 @@ router.get('/:id', (req, res, next)=> {
 
 router.post('', (req, res, next) => {
   const category = new Category({
-    name: req.body.name
+    name: req.body.name,
+    description: req.body.description
   });
   category.save().then(created=>{
     res.status(201).json({
@@ -36,7 +37,8 @@ router.post('', (req, res, next) => {
 router.put('/:id', (req, res, next)=> {
   const category = new Category({
     _id: req.body.id,
-    name: req.body.name
+    name: req.body.name,
+    description: req.body.description
   })
   Category.updateOne({_id: req.params.id}, category).then(result=>{
     res.status(200).json({msg: "Category updated"});

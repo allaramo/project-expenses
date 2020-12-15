@@ -14,7 +14,6 @@ export class CategoryCreateComponent implements OnInit{
   private mode = 'add';
   private id: string;
   category : Category;
-  addName = '';
 
 constructor(public categoryServices: CategoryServices, public route: ActivatedRoute) {}
 
@@ -26,7 +25,7 @@ constructor(public categoryServices: CategoryServices, public route: ActivatedRo
         this.isLoading = true;
         this.categoryServices.getOne(this.id).subscribe(cat => {
           this.isLoading = false;
-          this.category = {id: cat._id, name: cat.name}
+          this.category = {id: cat._id, name: cat.name, description: cat.description}
         });
       } else {
         this.mode = 'add';
@@ -41,9 +40,9 @@ constructor(public categoryServices: CategoryServices, public route: ActivatedRo
     }
     this.isLoading = true;
     if(this.mode === 'add'){
-      this.categoryServices.add(form.value.name);
+      this.categoryServices.add(form.value.name, form.value.description);
     } else {
-      this.categoryServices.update(this.id, form.value.name);
+      this.categoryServices.update(this.id, form.value.name, form.value.description);
     }
     form.resetForm();
   }

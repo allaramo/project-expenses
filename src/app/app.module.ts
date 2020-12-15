@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -37,7 +38,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatExpansionModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
