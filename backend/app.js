@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const categoryRoutes = require('./routes/category.routes');
+const subcategoryRoutes = require('./routes/subcategory.routes');
 const app = express();
 
 mongoose.connect("mongodb+srv://aranu:PVTPCvwbVwkgEaTj@gtp.qwman.mongodb.net/proexp?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,5 +24,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/category', categoryRoutes);
+app.use('/subcategory', subcategoryRoutes);
 
 module.exports = app;

@@ -35,7 +35,11 @@ export class CategoryServices {
   }
 
   getOne(id: string){
-    return this.http.get<{_id: string, name: string, description: string}>(this.url + id)
+    return this.http.get<{_id: string, name: string, description: string}>(this.url + id);
+  }
+
+  getList(){
+    return this.http.get<{msg: string, categories: any}>(this.url);
   }
 
   add(name: string, description: string){

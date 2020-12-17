@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { CategoryCreateComponent } from './categories/category-create/category-create.component';
 import { CategoryListComponent } from './categories/category-list/category-list.component';
+import { SubcategoryCreateComponent } from './subcategories/subcategory-create/subcategory-create.component';
+import { SubcategoryListComponent } from './subcategories/subcategory-list/subcategory-list.component';
 import { AppRoutingModule } from './app.routing.module';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +19,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 
 
@@ -25,7 +29,9 @@ import { MatIconModule } from '@angular/material/icon';
     AppComponent,
     HeaderComponent,
     CategoryCreateComponent,
-    CategoryListComponent
+    CategoryListComponent,
+    SubcategoryCreateComponent,
+    SubcategoryListComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +45,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
