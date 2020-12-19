@@ -17,16 +17,17 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Select Category</mat-label>
-      <mat-select name="category" [ngModel]="subcategory?.category" #name="ngModel">
+      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category">
         <mat-option  *ngFor="let category of categoryList" [value]="category">{{category.name}}</mat-option>
       </mat-select>
       <mat-error >Please select a Category</mat-error>
     </mat-form-field>
-    <mat-action-row>
+    <mat-card-actions>
       <button
-      mat-stroked-button
+      mat-raised-button
       color="primary"
-      type="submit"><mat-icon>save</mat-icon>Save</button>
-  </mat-action-row>
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/subcategory" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
   </form>
 </mat-card>

@@ -16,23 +16,28 @@ export class SubcategoryCreateComponent implements OnInit{
   private id: string;
   subcategory : Subcategory;
   categoryList = [];
+  category = null;
 
 constructor(public subcategoryServices: SubcategoryServices, public categoryServices: CategoryServices, public route: ActivatedRoute) {}
 
   ngOnInit(){
     this.route.paramMap.subscribe((paramMap : ParamMap)=> {
+      this.isLoading = true;
+      this.categoryServices.getList().subscribe(cat=>{
+        this.isLoading = false;
+        this.categoryList = cat.categories;
+      });
       if(paramMap.has('id')){
         this.mode = 'edit';
         this.id = paramMap.get('id');
-        this.isLoading = true;
         this.subcategoryServices.getOne(this.id).subscribe(subcat => {
           this.isLoading = false;
           this.subcategory = {id: subcat._id, name: subcat.name, category: subcat.category}
+          this.category = subcat.category;
         });
       } else {
         this.mode = 'add';
         this.id = null;
-        this.isLoading = true;
         this.categoryServices.getList().subscribe(cat=>{
           this.isLoading = false;
           this.categoryList = cat.categories;
@@ -52,5 +57,9 @@ constructor(public subcategoryServices: SubcategoryServices, public categoryServ
       this.subcategoryServices.update(this.id, form.value.name, form.value.category);
     }
     form.resetForm();
+  }
+
+  compareObjects(o1: any, o2: any): boolean {
+    return o1.name === o2.name && o1.id === o2.id;
   }
 }
