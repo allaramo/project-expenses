@@ -5,7 +5,7 @@ const categoryRoutes = require('./routes/category.routes');
 const subcategoryRoutes = require('./routes/subcategory.routes');
 const app = express();
 
-mongoose.connect("mongodb+srv://aranu:PVTPCvwbVwkgEaTj@gtp.qwman.mongodb.net/proexp?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(()=>{
   console.log("Connected to DB");
 })

@@ -5,29 +5,34 @@ import { Subcategory } from './subcategory.model';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Category } from '../categories/category.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class SubcategoryServices {
   private subcategories : Subcategory[] = [];
-  private subcategoriesUpdated = new Subject<Subcategory[]>();
-  private url = 'http://localhost:3000/subcategory/';
+  private subcategoriesUpdated = new Subject<{data: Subcategory[], count: number}>();
+  private url = environment.apiURL+'/subcategory/';
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getAll(){
-    this.http.get<{msg: string, subcategories: any}>(this.url)
+  getAll(pageSize: number, page: number){
+    const queryParams = "?pageSize="+pageSize+"&page="+page;
+    this.http.get<{msg: string, subcategories: any, count: number}>(this.url+queryParams)
     .pipe(map(data=>{
-      return data.subcategories.map(subcategory =>{
-        return {
-          id: subcategory._id,
-          name: subcategory.name,
-          category: subcategory.category
-        }
-      });
+      return {
+        results : data.subcategories.map(subcategory =>{
+          return {
+            id: subcategory._id,
+            name: subcategory.name,
+            category: subcategory.category
+          }
+        }),
+        count: data.count
+      };
     }))
-    .subscribe(subcategories=>{
-      this.subcategories = subcategories;
-      this.subcategoriesUpdated.next([...this.subcategories]);
+    .subscribe(subcategoriesData=>{
+      this.subcategories = subcategoriesData.results;
+      this.subcategoriesUpdated.next({data: [...this.subcategories], count: subcategoriesData.count});
     });
   }
 
@@ -43,9 +48,6 @@ export class SubcategoryServices {
       const subcategory : Subcategory = {id: null, name: name, category: category};
       this.http.post<{msg: string, id: string}>(this.url, subcategory)
       .subscribe(res=>{
-        subcategory.id = res.id;
-        this.subcategories.push(subcategory);
-        this.subcategoriesUpdated.next([...this.subcategories]);
         this.router.navigate(['/subcategory']);
       });
   }
@@ -54,21 +56,11 @@ export class SubcategoryServices {
     const subcategory : Subcategory = {id: id, name: name, category: category};
     this.http.put(this.url + id, subcategory)
     .subscribe(res=>{
-      const updated = [...this.subcategories];
-      const old = updated.findIndex(subcat => subcat.id === subcat.id);
-      updated[old] = subcategory;
-      this.subcategories = updated;
-      this.subcategoriesUpdated.next([...this.subcategories]);
       this.router.navigate(['/subcategory']);
     });
   }
 
   delete(id : string){
-    this.http.delete(this.url + id)
-    .subscribe(()=>{
-      const updated = this.subcategories.filter(subcat => subcat.id !== id);
-      this.subcategories = updated;
-      this.subcategoriesUpdated.next([...this.subcategories]);
-    });
+    return this.http.delete(this.url + id);
   }
 }
