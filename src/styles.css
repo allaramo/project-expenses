@@ -18,6 +18,8 @@ mat-stroked-button{
 
 mat-form-field {
   width: 100% !important;
+  font-size: 14px;
+  width: 100%;
 }
 
 mat-spinner {
@@ -30,4 +32,12 @@ mat-card-content {
 
 .new-button {
   padding-right: 7px !important;
+}
+
+table {
+  width: 100%;
+}
+
+td, th{
+  text-align: center !important;
 }

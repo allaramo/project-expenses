@@ -1,12 +1,10 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/">ProjectExpenses</a></span>
+  <span><a routerLink="/">ProjExp</a></span>
   <span class="spacer"></span>
-  <ul>
-    <li>
-      <a mat-button routerLink="/category" routerLinkActive="mat-accent">Categories</a>
-    </li>
-    <li>
-      <a mat-button routerLink="/subcategory" routerLinkActive="mat-accent">Subcategories</a>
-    </li>
-  </ul>
+  <!-- displaying menu -->
+  <button mat-button [matMenuTriggerFor]="belowMenu">Catalogs</button>
+  <mat-menu #belowMenu="matMenu" yPosition="below">
+    <button mat-menu-item routerLink="/category">Categories</button>
+    <button mat-menu-item routerLink="/subcategory">Subcategories</button>
+  </mat-menu>
 </mat-toolbar>

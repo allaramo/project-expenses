@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-
+//imports angular material modules and exports them to be used
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   exports: [
@@ -25,6 +26,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTableModule,
     MatDialogModule,
     MatPaginatorModule,
+    MatMenuModule
   ]
 })
 export class AngularMaterialModule {}

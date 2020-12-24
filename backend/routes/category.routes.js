@@ -1,54 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const Category = require('../models/category.model');
+const controller = require('../controllers/category.controller');
 
-router.get('', (req, res, next)=>{
-  Category.find()
-  .then(docs => {
-    res.status(200).json({
-      msg: "Categories fetched successfully",
-      categories: docs
-    });
-  });
-});
+//retrieves all data
+router.get('', controller.getAll);
 
-router.get('/:id', (req, res, next)=> {
-  Category.findById(req.params.id).then(doc => {
-    if(doc){
-      res.status(200).json(doc);
-    } else {
-      res.status(404).json({msg: 'Category not found'});
-    }
-  })
-});
+//retrieves a single item by its id
+router.get('/:id', controller.getOne);
 
-router.post('', (req, res, next) => {
-  const category = new Category({
-    name: req.body.name,
-    description: req.body.description
-  });
-  category.save().then(created=>{
-    res.status(201).json({
-      msg: 'New Category added', id: created._id
-    });
-  });
-});
+//adds a new item
+router.post('', controller.add);
 
-router.put('/:id', (req, res, next)=> {
-  const category = new Category({
-    _id: req.body.id,
-    name: req.body.name,
-    description: req.body.description
-  })
-  Category.updateOne({_id: req.params.id}, category).then(result=>{
-    res.status(200).json({msg: "Category updated"});
-  });
-});
+//updates an item by its id
+router.put('/:id', controller.update);
 
-router.delete('/:id', (req, res, next)=>{
-  Category.deleteOne({_id: req.params.id}).then(result => {
-    res.status(200).json({msg: "Category deleted"});
-  });
-});
+//deletes an item by its id
+router.delete('/:id', controller.delete);
 
 module.exports = router;

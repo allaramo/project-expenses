@@ -1,5 +1,7 @@
 <mat-card>
+  <!-- shows progress spinner if flag loading is true -->
   <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
   <form
   (submit)="saveData(subcatForm)"
   #subcatForm="ngForm"
@@ -17,12 +19,13 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Select Category</mat-label>
-      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category">
+      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category" required>
         <mat-option  *ngFor="let category of categoryList" [value]="category">{{category.name}}</mat-option>
       </mat-select>
       <mat-error >Please select a Category</mat-error>
     </mat-form-field>
     <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
       <button
       mat-raised-button
       color="primary"
