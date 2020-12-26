@@ -3,8 +3,8 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <!-- creates form with fields. On edit mode fills the fields with ngModel -->
   <form
-  (submit)="saveData(catForm)"
-  #catForm="ngForm"
+  (submit)="saveData(phaForm)"
+  #phaForm="ngForm"
   *ngIf="!isLoading">
     <mat-form-field>
       <input

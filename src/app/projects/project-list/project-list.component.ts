@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 //imports model and services
-import { Category } from '../category.model';
-import { CategoryServices } from '../category.services';
+import { Project } from '../project.model';
+import { ProjectServices } from '../project.services';
 //imports material table data source module
 import { MatTableDataSource } from '@angular/material/table';
 //imports dialog component and material module for delete confirmation
@@ -12,12 +12,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'category-list',
-  templateUrl: './category-list.Component.html'
+  selector: 'project-list',
+  templateUrl: './project-list.Component.html'
 })
-export class CategoryListComponent implements OnInit, OnDestroy{
+export class ProjectListComponent implements OnInit, OnDestroy{
   //to store the array of objects
-  categories: Category[] = [];
+  projects: Project[] = [];
   //a flag used to show or hide the progress spinner
   isLoading = false;
   //for pagination
@@ -27,29 +27,29 @@ export class CategoryListComponent implements OnInit, OnDestroy{
   //for subscription
   private sub : Subscription;
   //array of headers to be shown
-  displayedColumns: string[] = ['name','description','id'];
+  displayedColumns: string[] = ['name','budget','description','status','id'];
   //holds the data to be shown on the table
-  dataSource = new MatTableDataSource(this.categories);
+  dataSource = new MatTableDataSource(this.projects);
 
   //constructor using services and dialog for delete event
-  constructor(public categoryServices : CategoryServices, public dialog: MatDialog){}
+  constructor(public projectServices : ProjectServices, public dialog: MatDialog){}
 
   //on init gets all data to be shown on table
   ngOnInit(){
     this.isLoading = true;
     //calls the getall service to retrieve all data sending pagination parameters
-    this.categoryServices.getAll(this.pageSize,this.page);
+    this.projectServices.getAll(this.pageSize,this.page);
     //calls the update service and subscribes
-    this.sub = this.categoryServices.getUpdate().subscribe((results: { data: Category[], count: number })=>{
+    this.sub = this.projectServices.getUpdate().subscribe((results: { data: Project[], count: number })=>{
       this.isLoading = false;
-      this.categories = results.data;
+      this.projects = results.data;
       this.length = results.count;
       //fills the datasource for the table
-      this.dataSource = new MatTableDataSource(this.categories);
+      this.dataSource = new MatTableDataSource(this.projects);
       //creates a new predicate used to filter the table
       this.dataSource.filterPredicate = (data, filter) => {
         //a variable with all information used to search on it
-        const dataStr = data.name + data.description;
+        const dataStr = data.name + data.budget + data.description + data.status;
         //lowercases filters and data to find a match
         return dataStr.trim().toLowerCase().indexOf(filter.trim().toLowerCase()) != -1;
       }
@@ -66,9 +66,9 @@ export class CategoryListComponent implements OnInit, OnDestroy{
     dialogRef.afterClosed().subscribe(result => {
       //...if the yes was pressed the item is deleted calling its correspondent services
       if(result) {
-        this.categoryServices.delete(id).subscribe(()=>{
+        this.projectServices.delete(id).subscribe(()=>{
           //calls the service to get all data again to get an update
-          this.categoryServices.getAll(this.pageSize,this.page);
+          this.projectServices.getAll(this.pageSize,this.page);
         });
       }
     });
@@ -89,6 +89,6 @@ export class CategoryListComponent implements OnInit, OnDestroy{
     this.isLoading = true;
     this.page = pageData.pageIndex + 1;
     this.pageSize = pageData.pageSize;
-    this.categoryServices.getAll(this.pageSize,this.page);
+    this.projectServices.getAll(this.pageSize,this.page);
   }
 }

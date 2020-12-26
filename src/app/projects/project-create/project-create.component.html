@@ -3,8 +3,8 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <!-- creates form with fields. On edit mode fills the fields with ngModel -->
   <form
-  (submit)="saveData(catForm)"
-  #catForm="ngForm"
+  (submit)="saveData(proForm)"
+  #proForm="ngForm"
   *ngIf="!isLoading">
     <mat-form-field>
       <input
@@ -13,9 +13,20 @@
       name="name"
       required
       placeholder="Name"
-      [ngModel]="category?.name"
+      [ngModel]="project?.name"
       #name="ngModel">
       <mat-error >Please enter a name</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="text"
+      matInput
+      name="budget"
+      required
+      placeholder="Budget"
+      [ngModel]="project?.budget"
+      #name="ngModel">
+      <mat-error >Please enter a budget</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
@@ -24,9 +35,16 @@
       name="description"
       required
       placeholder="Description"
-      [ngModel]="category?.description"
+      [ngModel]="project?.description"
       #name="ngModel">
       <mat-error >Please enter a description</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select a Status</mat-label>
+      <mat-select name="status"  [compareWith]="compareObjects" [(ngModel)]="status" required>
+        <mat-option  *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Status</mat-error>
     </mat-form-field>
     <mat-card-actions>
       <!-- displays buttons of cancel and save -->
@@ -34,7 +52,7 @@
       mat-raised-button
       color="primary"
       type="submit"><mat-icon>save</mat-icon> SAVE</button>
-      <a mat-raised-button color="warn" routerLink="/category" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+      <a mat-raised-button color="warn" routerLink="/project" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
     </mat-card-actions>
   </form>
 </mat-card>

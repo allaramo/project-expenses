@@ -2,10 +2,14 @@
   <span><a routerLink="/">ProjExp</a></span>
   <span class="spacer"></span>
   <!-- displaying menu -->
-  <button mat-button [matMenuTriggerFor]="belowMenu">Catalogs</button>
-  <mat-menu #belowMenu="matMenu" yPosition="below">
+  <button mat-button [matMenuTriggerFor]="cat">Categories</button>
+  <mat-menu #cat="matMenu" yPosition="below">
     <button mat-menu-item routerLink="/category">Categories</button>
     <button mat-menu-item routerLink="/subcategory">Subcategories</button>
+  </mat-menu>
+  <button mat-button [matMenuTriggerFor]="pro">Projects</button>
+  <mat-menu #pro="matMenu" yPosition="below">
     <button mat-menu-item routerLink="/phase">Phases</button>
+    <button mat-menu-item routerLink="/project">Projects</button>
   </mat-menu>
 </mat-toolbar>

@@ -4,6 +4,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+//importing routing module
+import { AppRoutingModule } from './app.routing.module';
+//importing angular material modules
+import { AngularMaterialModule } from './app.angularmaterial.module';
 //importing components
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -14,11 +18,8 @@ import { SubcategoryCreateComponent } from './subcategories/subcategory-create/s
 import { SubcategoryListComponent } from './subcategories/subcategory-list/subcategory-list.component';
 import { PhaseCreateComponent } from './phases/phase-create/phase-create.component';
 import { PhaseListComponent } from './phases/phase-list/phase-list.component';
-//importing routing module
-import { AppRoutingModule } from './app.routing.module';
-//importing angular material modules
-import { AngularMaterialModule } from './app.angularmaterial.module';
-
+import { ProjectCreateComponent } from './projects/project-create/project-create.component';
+import { ProjectListComponent } from './projects/project-list/project-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import { AngularMaterialModule } from './app.angularmaterial.module';
     SubcategoryCreateComponent,
     SubcategoryListComponent,
     PhaseCreateComponent,
-    PhaseListComponent
+    PhaseListComponent,
+    ProjectCreateComponent,
+    ProjectListComponent
   ],
   imports: [
     BrowserModule,

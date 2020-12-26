@@ -9,17 +9,17 @@ import { Router } from '@angular/router';
 //importing env vars
 import { environment } from '../../environments/environment';
 //importing models needed
-import { Category } from '../categories/category.model';
+import { Project } from '../projects/project.model';
 
 //adding injectable
 @Injectable({providedIn: 'root'})
-export class CategoryServices {
-  //creating subcategories array based on model
-  private categories : Category[] = [];
+export class ProjectServices {
+  //creating subprojects array based on model
+  private projects : Project[] = [];
   //creating a new subject to collect the data retrieved and the counter of items
-  private categoriesUpdated = new Subject<{data: Category[], count: number}>();
+  private projectsUpdated = new Subject<{data: Project[], count: number}>();
   //prepares the url used for the http requests
-  private url = environment.apiURL+'/category/';
+  private url = environment.apiURL+'/project/';
 
   //constructor using the http client and the router
   constructor(private http: HttpClient, private router: Router) {}
@@ -29,67 +29,69 @@ export class CategoryServices {
     //prepares the pagination parameters
     const queryParams = "?pageSize="+pageSize+"&page="+page;
     //does a get request using the pagination
-    this.http.get<{msg: string, categories: any, count: number}>(this.url+queryParams)
+    this.http.get<{msg: string, projects: any, count: number}>(this.url+queryParams)
     //maps the results to return a json with the message, the array of items and the counter
     .pipe(map(data=>{
       return {
         //maps the array of itmes
-        results : data.categories.map(category =>{
+        results : data.projects.map(project =>{
           return {
-            id: category._id,
-            name: category.name,
-            description: category.description
+            id: project._id,
+            name: project.name,
+            budget: project.budget,
+            description: project.description,
+            status: project.status
           }
         }),
         count: data.count
       };
     }))
     //subscribes to the data
-    .subscribe(categoriesData=>{
-      this.categories = categoriesData.results;
+    .subscribe(projectsData=>{
+      this.projects = projectsData.results;
       //updates the data
-      this.categoriesUpdated.next({data: [...this.categories], count: categoriesData.count});
+      this.projectsUpdated.next({data: [...this.projects], count: projectsData.count});
     });
   }
 
   //makes an observable
   getUpdate(){
-    return this.categoriesUpdated.asObservable();
+    return this.projectsUpdated.asObservable();
   }
 
   //gets one item based on its id
   getOne(id: string){
     //sends a get request using the id
-    return this.http.get<{_id: string, name: string, description: string}>(this.url + id);
+    return this.http.get<{_id: string, name: string, budget: number, description: string, status: string}>(this.url + id);
   }
 
   //gets a list of items to fill for dropboxes
   getList(){
     //sends a get request
-    return this.http.get<{msg: string, categories: any}>(this.url);
+    return this.http.get<{msg: string, projects: any}>(this.url);
   }
 
   //adds a new item
-  add(name: string, description: string){
+  add(name: string, budget: number, description: string, status: string){
     //uses the model to create a new object
-    const category : Category = {id: null, name: name, description: description};
+    const project : Project = {id: null, name: name, budget: budget, description: description, status: status};
     //sends a post request sending the object
-    this.http.post<{msg: string, id: string}>(this.url, category)
+    this.http.post<{msg: string, id: string}>(this.url, project)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
-      this.router.navigate(['/category']);
+      this.router.navigate(['/project']);
     });
   }
 
   //updates a new item
-  update(id: string, name: string, description: string){
+  update(id: string, name: string, budget: number, description: string, status: string){
     //uses the model to create a new object using the id and the fields changed
-    const category : Category = {id: id, name: name, description: description};
+    const project : Project = {id: id, name: name, budget: budget, description: description, status: status};
     //sends a put request using the id and the object
-    this.http.put(this.url + id, category)
+    this.http.put(this.url + id, project)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
-      this.router.navigate(['/category']);
+      this.router.navigate(['/project']);
     });
   }
 
