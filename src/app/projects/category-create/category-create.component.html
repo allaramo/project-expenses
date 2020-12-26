@@ -1,0 +1,40 @@
+<mat-card>
+  <!-- shows progress spinner if flag loading is true -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
+  <form
+  (submit)="saveData(catForm)"
+  #catForm="ngForm"
+  *ngIf="!isLoading">
+    <mat-form-field>
+      <input
+      type="text"
+      matInput
+      name="name"
+      required
+      placeholder="Name"
+      [ngModel]="category?.name"
+      #name="ngModel">
+      <mat-error >Please enter a name</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="text"
+      matInput
+      name="description"
+      required
+      placeholder="Description"
+      [ngModel]="category?.description"
+      #name="ngModel">
+      <mat-error >Please enter a description</mat-error>
+    </mat-form-field>
+    <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/category" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
+  </form>
+</mat-card>

@@ -1,0 +1,53 @@
+<mat-card>
+  <!-- if the flag of loading is active shows the spinner -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-card-title>SUBCATEGORIES</mat-card-title>
+  <!-- new item button that redirects to the creating screen -->
+  <mat-card-actions class="new-button">
+    <a mat-raised-button *ngIf="!isLoading" color="primary" [routerLink]="['/subcategory/add']"><mat-icon>add</mat-icon> NEW</a>
+  </mat-card-actions>
+  <mat-card-content class="mat-elevation-z8">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <!-- if a keyword is written calls the function to filter the table with that keyword -->
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. electricity" #input>
+    </mat-form-field>
+    <!-- uses dataSource to fill the table -->
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> Category </th>
+        <td mat-cell *matCellDef="let element"> {{element.category?.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <!-- adds edit and delete actions for each element -->
+          <a mat-icon-button color="primary" [routerLink]="['/subcategory/edit', element.id]"><mat-icon>edit</mat-icon></a>
+          <button mat-icon-button color="warn" (click)="onDelete(element.id, element.name)"><mat-icon>delete</mat-icon></button>
+        </td>
+      </ng-container>
+      <!-- adds headers -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <!-- in case of no data that matches filter it displays a message -->
+        <td *ngIf="subcategories.length > 0"class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        <!-- in case of no data it displays a message -->
+        <td *ngIf="subcategories.length == 0" class="mat-cell" colspan="4">No data was found</td>
+      </tr>
+    </table>
+
+    <!-- shows paginator bar -->
+    <mat-paginator
+    *ngIf="subcategories.length > 0"
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 50, 100]"
+    (page)="onPaginate($event)"></mat-paginator>
+  </mat-card-content>
+</mat-card>
+
