@@ -7,7 +7,7 @@ import { SubcategoryServices } from '../subcategory.services';
 import { CategoryServices } from '../../categories/category.services';
 
 @Component({
-  selector: 'category-create',
+  selector: 'subcategory-create',
   templateUrl: './subcategory-create.component.html'
 })
 export class SubcategoryCreateComponent implements OnInit{

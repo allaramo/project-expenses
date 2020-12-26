@@ -1,0 +1,64 @@
+<mat-card>
+  <!-- shows progress spinner if flag loading is true -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
+  <form
+  (submit)="saveData(prophaForm)"
+  #prophaForm="ngForm"
+  *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>Select Project</mat-label>
+      <mat-select name="project"  [compareWith]="compareObjects" [(ngModel)]="project" required>
+        <mat-option  *ngFor="let project of projectList" [value]="project">{{project.name}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Project</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Phase</mat-label>
+      <mat-select name="phase"  [compareWith]="compareObjects" [(ngModel)]="phase" required>
+        <mat-option  *ngFor="let phase of phaseList" [value]="phase">{{phase.description}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Phase</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="number"
+      matInput
+      name="order"
+      required
+      min="1"
+      placeholder="Order"
+      [ngModel]="projectPhase?.order"
+      #name="ngModel">
+      <mat-error >Please enter an order</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="number"
+      matInput
+      name="percentage"
+      required
+      min="1"
+      max="100"
+      placeholder="Percentage"
+      [ngModel]="projectPhase?.percentage"
+      #name="ngModel">
+      <mat-error >Please enter a percentage</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select a Status</mat-label>
+      <mat-select name="status"  [compareWith]="compareObjects2" [(ngModel)]="status" required>
+        <mat-option  *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Status</mat-error>
+    </mat-form-field>
+    <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/projectphase" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
+  </form>
+</mat-card>

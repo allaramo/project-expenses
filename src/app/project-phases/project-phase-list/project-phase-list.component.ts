@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 //imports model and services
-import { Subcategory } from '../subcategory.model';
-import { SubcategoryServices } from '../subcategory.services';
+import { ProjectPhase } from '../project-phase.model';
+import { ProjectPhaseServices } from '../project-phase.services';
 //imports material table data source module
 import { MatTableDataSource } from '@angular/material/table';
 //imports dialog component and material module for delete confirmation
@@ -12,12 +12,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'subcategory-list',
-  templateUrl: './subcategory-list.Component.html'
+  selector: 'project-phase-list',
+  templateUrl: './project-phase-list.Component.html'
 })
-export class SubcategoryListComponent implements OnInit, OnDestroy {
+export class ProjectPhaseListComponent implements OnInit, OnDestroy {
   //to store the array of objects
-  subcategories: Subcategory[] = [];
+  projectPhases: ProjectPhase[] = [];
   //a flag used to show or hide the progress spinner
   isLoading = false;
   //for pagination
@@ -27,29 +27,29 @@ export class SubcategoryListComponent implements OnInit, OnDestroy {
   //for subscription
   private sub : Subscription;
   //array of headers to be shown
-  displayedColumns: string[] = ['name', 'category','id'];
+  displayedColumns: string[] = ['project', 'order', 'phase','percentage','status','id'];
   //holds the data to be shown on the table
-  dataSource = new MatTableDataSource(this.subcategories);
+  dataSource = new MatTableDataSource(this.projectPhases);
 
   //constructor using services and dialog for delete event
-  constructor(public subcategoryServices : SubcategoryServices, public dialog: MatDialog){}
+  constructor(public projectPhaseServices : ProjectPhaseServices, public dialog: MatDialog){}
 
   //on init gets all data to be shown on table
   ngOnInit(){
     this.isLoading = true;
     //calls the getall service to retrieve all data sending pagination parameters
-    this.subcategoryServices.getAll(this.pageSize,this.page);
+    this.projectPhaseServices.getAll(this.pageSize,this.page);
     //calls the update service and subscribes
-    this.sub = this.subcategoryServices.getUpdate().subscribe((results: { data: Subcategory[], count: number })=>{
+    this.sub = this.projectPhaseServices.getUpdate().subscribe((results: { data: ProjectPhase[], count: number })=>{
       this.isLoading = false;
-      this.subcategories = results.data;
+      this.projectPhases = results.data;
       this.length = results.count;
       //fills the datasource for the table
-      this.dataSource = new MatTableDataSource(this.subcategories);
+      this.dataSource = new MatTableDataSource(this.projectPhases);
       //creates a new predicate used to filter the table
       this.dataSource.filterPredicate = (data, filter) => {
         //a variable with all information used to search on it
-        const dataStr = data.name + data.category.name;
+        const dataStr = data.project.name + data.phase.description + data.percentage + data.status + data.order;
         //lowercases filters and data to find a match
         return dataStr.trim().toLowerCase().indexOf(filter.trim().toLowerCase()) != -1;
       }
@@ -66,9 +66,9 @@ export class SubcategoryListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       //...if the yes was pressed the item is deleted calling its correspondent services
       if(result) {
-        this.subcategoryServices.delete(id).subscribe(()=>{
+        this.projectPhaseServices.delete(id).subscribe(()=>{
           //calls the service to get all data again to get an update
-          this.subcategoryServices.getAll(this.pageSize,this.page);
+          this.projectPhaseServices.getAll(this.pageSize,this.page);
         });
       }
     });
@@ -89,6 +89,6 @@ export class SubcategoryListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.page = pageData.pageIndex + 1;
     this.pageSize = pageData.pageSize;
-    this.subcategoryServices.getAll(this.pageSize,this.page);
+    this.projectPhaseServices.getAll(this.pageSize,this.page);
   }
 }

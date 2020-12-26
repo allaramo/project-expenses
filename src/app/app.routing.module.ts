@@ -9,7 +9,8 @@ import { PhaseCreateComponent } from './phases/phase-create/phase-create.compone
 import { PhaseListComponent } from './phases/phase-list/phase-list.component';
 import { ProjectCreateComponent } from './projects/project-create/project-create.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
-
+import { ProjectPhaseCreateComponent } from './project-phases/project-phase-create/project-phase-create.component';
+import { ProjectPhaseListComponent } from './project-phases/project-phase-list/project-phase-list.component';
 //creating routes
 const routes: Routes = [
   {path: 'category', component: CategoryListComponent},
@@ -24,6 +25,9 @@ const routes: Routes = [
   {path: 'project', component: ProjectListComponent},
   {path: 'project/add', component: ProjectCreateComponent},
   {path: 'project/edit/:id', component: ProjectCreateComponent},
+  {path: 'projectphase', component: ProjectPhaseListComponent},
+  {path: 'projectphase/add', component: ProjectPhaseCreateComponent},
+  {path: 'projectphase/edit/:id', component: ProjectPhaseCreateComponent},
 ];
 
 @NgModule({

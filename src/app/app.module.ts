@@ -20,6 +20,8 @@ import { PhaseCreateComponent } from './phases/phase-create/phase-create.compone
 import { PhaseListComponent } from './phases/phase-list/phase-list.component';
 import { ProjectCreateComponent } from './projects/project-create/project-create.component';
 import { ProjectListComponent } from './projects/project-list/project-list.component';
+import { ProjectPhaseCreateComponent } from './project-phases/project-phase-create/project-phase-create.component';
+import { ProjectPhaseListComponent } from './project-phases/project-phase-list/project-phase-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { ProjectListComponent } from './projects/project-list/project-list.compo
     PhaseCreateComponent,
     PhaseListComponent,
     ProjectCreateComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    ProjectPhaseCreateComponent,
+    ProjectPhaseListComponent
   ],
   imports: [
     BrowserModule,
