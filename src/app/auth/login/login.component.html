@@ -1,6 +1,7 @@
 <mat-card>
   <!-- shows progress spinner if flag loading is true -->
   <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-card-title>LOG IN</mat-card-title>
   <!-- creates form with fields. On edit mode fills the fields with ngModel -->
   <form
   (submit)="onLogin(logForm)"

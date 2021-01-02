@@ -1,6 +1,7 @@
 //imports model
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //signs up an user
 exports.signUp = (req, res, next)=>{
@@ -18,15 +19,62 @@ exports.signUp = (req, res, next)=>{
     user.save()
     .then(created=>{
       res.status(201).json({
-        msg: 'New User Signed Up', id: created._id
+        msg: 'You have been signed up successfully',
+        id: created._id,
+        error: ''
       });
     })
     .catch(err => {
       res.status(500).json({
+        msg: 'Error: Sign Up Unsuccessful',
+        id: null,
         error: err
       });
     });
   })
+}
+
+//logs in an user
+exports.login = (req, res, next)=>{
+  let fetchedUser;
+  User.findOne({email: req.body.email})
+  .then(user => {
+    if(!user) {
+      return res.status(401).json({
+        msg: "Authentication Failed",
+        error: "Wrong Email",
+        token: null
+      });
+    }
+    fetchedUser = user;
+    return bcrypt.compare(req.body.password, user.password)
+  })
+  .then(result => {
+    if(!result){
+      return res.status(401).json({
+        msg: "Authentication Failed",
+        error: "Wrong Password",
+        token: null
+      });
+    }
+    const token = jwt.sign(
+      { email: fetchedUser.email, userId: fetchedUser._id },
+       'MIRISTAMIDOPROPILDIMETILAMINA',
+       {expiresIn: "1h"}
+    );
+    res.status(200).json({
+      msg: "Authentication Successfully",
+      error: '',
+      token: token
+    })
+  })
+  .catch(err => {
+    return res.status(401).json({
+      msg: "Authentication Failed",
+      error: err,
+      token: null
+    });
+  });
 }
 
 //retrieves all items

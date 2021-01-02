@@ -21,41 +21,43 @@ import { PermissionCreateComponent } from './permissions/permission-create/permi
 import { PermissionListComponent } from './permissions/permission-list/permission-list.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserListComponent } from './users/user-list/user-list.component';
+import { AuthGuard } from "./auth/auth.guard";
 //creating routes
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignUpComponent},
-  {path: 'category', component: CategoryListComponent},
-  {path: 'category/add', component: CategoryCreateComponent},
-  {path: 'category/edit/:id', component: CategoryCreateComponent},
-  {path: 'subcategory', component: SubcategoryListComponent},
-  {path: 'subcategory/add', component: SubcategoryCreateComponent},
-  {path: 'subcategory/edit/:id', component: SubcategoryCreateComponent},
-  {path: 'phase', component: PhaseListComponent},
-  {path: 'phase/add', component: PhaseCreateComponent},
-  {path: 'phase/edit/:id', component: PhaseCreateComponent},
-  {path: 'project', component: ProjectListComponent},
-  {path: 'project/add', component: ProjectCreateComponent},
-  {path: 'project/edit/:id', component: ProjectCreateComponent},
-  {path: 'projectphase', component: ProjectPhaseListComponent},
-  {path: 'projectphase/add', component: ProjectPhaseCreateComponent},
-  {path: 'projectphase/edit/:id', component: ProjectPhaseCreateComponent},
-  {path: 'role', component: RoleListComponent},
-  {path: 'role/add', component: RoleCreateComponent},
-  {path: 'role/edit/:id', component: RoleCreateComponent},
-  {path: 'route', component: RouteListComponent},
-  {path: 'route/add', component: RouteCreateComponent},
-  {path: 'route/edit/:id', component: RouteCreateComponent},
-  {path: 'permission', component: PermissionListComponent},
-  {path: 'permission/add', component: PermissionCreateComponent},
-  {path: 'permission/edit/:id', component: PermissionCreateComponent},
-  {path: 'user', component: UserListComponent},
-  {path: 'user/add', component: UserCreateComponent},
-  {path: 'user/edit/:id', component: UserCreateComponent},
+  {path: 'category', component: CategoryListComponent, canActivate: [AuthGuard]},
+  {path: 'category/add', component: CategoryCreateComponent, canActivate: [AuthGuard]},
+  {path: 'category/edit/:id', component: CategoryCreateComponent, canActivate: [AuthGuard]},
+  {path: 'subcategory', component: SubcategoryListComponent, canActivate: [AuthGuard]},
+  {path: 'subcategory/add', component: SubcategoryCreateComponent, canActivate: [AuthGuard]},
+  {path: 'subcategory/edit/:id', component: SubcategoryCreateComponent, canActivate: [AuthGuard]},
+  {path: 'phase', component: PhaseListComponent, canActivate: [AuthGuard]},
+  {path: 'phase/add', component: PhaseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'phase/edit/:id', component: PhaseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'project', component: ProjectListComponent, canActivate: [AuthGuard]},
+  {path: 'project/add', component: ProjectCreateComponent, canActivate: [AuthGuard]},
+  {path: 'project/edit/:id', component: ProjectCreateComponent, canActivate: [AuthGuard]},
+  {path: 'projectphase', component: ProjectPhaseListComponent, canActivate: [AuthGuard]},
+  {path: 'projectphase/add', component: ProjectPhaseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'projectphase/edit/:id', component: ProjectPhaseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'role', component: RoleListComponent, canActivate: [AuthGuard]},
+  {path: 'role/add', component: RoleCreateComponent, canActivate: [AuthGuard]},
+  {path: 'role/edit/:id', component: RoleCreateComponent, canActivate: [AuthGuard]},
+  {path: 'route', component: RouteListComponent, canActivate: [AuthGuard]},
+  {path: 'route/add', component: RouteCreateComponent, canActivate: [AuthGuard]},
+  {path: 'route/edit/:id', component: RouteCreateComponent, canActivate: [AuthGuard]},
+  {path: 'permission', component: PermissionListComponent, canActivate: [AuthGuard]},
+  {path: 'permission/add', component: PermissionCreateComponent, canActivate: [AuthGuard]},
+  {path: 'permission/edit/:id', component: PermissionCreateComponent, canActivate: [AuthGuard]},
+  {path: 'user', component: UserListComponent, canActivate: [AuthGuard]},
+  {path: 'user/add', component: UserCreateComponent, canActivate: [AuthGuard]},
+  {path: 'user/edit/:id', component: UserCreateComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule{}

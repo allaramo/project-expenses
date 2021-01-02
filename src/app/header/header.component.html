@@ -2,24 +2,25 @@
   <span><a routerLink="/">ProjExp</a></span>
   <span class="spacer"></span>
   <!-- displaying menu -->
-  <button mat-button [matMenuTriggerFor]="cat">Categories</button>
+  <button *ngIf="userAuthenticated" mat-button [matMenuTriggerFor]="cat">Categories</button>
   <mat-menu #cat="matMenu" yPosition="below">
     <button mat-menu-item routerLink="/category">Categories</button>
     <button mat-menu-item routerLink="/subcategory">Subcategories</button>
   </mat-menu>
-  <button mat-button [matMenuTriggerFor]="pro">Projects</button>
+  <button *ngIf="userAuthenticated" mat-button [matMenuTriggerFor]="pro">Projects</button>
   <mat-menu #pro="matMenu" yPosition="below">
     <button mat-menu-item routerLink="/phase">Phases</button>
     <button mat-menu-item routerLink="/project">Projects</button>
     <button mat-menu-item routerLink="/projectphase">Project Phases</button>
   </mat-menu>
-  <button mat-button [matMenuTriggerFor]="sec">Security</button>
+  <button *ngIf="userAuthenticated" mat-button [matMenuTriggerFor]="sec">Security</button>
   <mat-menu #sec="matMenu" yPosition="below">
     <button mat-menu-item routerLink="/role">Roles</button>
     <button mat-menu-item routerLink="/route">Routes</button>
     <button mat-menu-item routerLink="/user">Users</button>
     <button mat-menu-item routerLink="/permission">Permissions</button>
   </mat-menu>
-  <button mat-button routerLink="/login">Login</button>
-  <button mat-button routerLink="/signup">Sign Up</button>
+  <button *ngIf="!userAuthenticated" mat-button routerLink="/login">Login</button>
+  <button *ngIf="!userAuthenticated" mat-button routerLink="/signup">Sign Up</button>
+  <button *ngIf="userAuthenticated" mat-button (click)="onLogout()">Logout</button>
 </mat-toolbar>

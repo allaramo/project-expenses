@@ -1,8 +1,31 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { AuthServices } from "../auth/auth.services";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {}
+export class HeaderComponent implements OnInit, OnDestroy{
+  private authListenerSubs: Subscription;
+  //to enable or disable menus based on authentication
+  userAuthenticated = false;
+  constructor(private authService: AuthServices) {}
+
+  ngOnInit(){
+    this.authListenerSubs = this.authService
+    .getAuthStatusListener()
+    .subscribe(isAuth => {
+      this.userAuthenticated = isAuth;
+    });
+  }
+
+  ngOnDestroy(){
+    this.authListenerSubs.unsubscribe();
+  }
+
+  onLogout(){
+    this.authService.logout();
+  }
+}

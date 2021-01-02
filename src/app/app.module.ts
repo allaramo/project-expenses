@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //importing routing module
 import { AppRoutingModule } from './app.routing.module';
@@ -12,6 +12,7 @@ import { AngularMaterialModule } from './app.angularmaterial.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { MessageComponent } from './message/message.component';
 import { CategoryCreateComponent } from './categories/category-create/category-create.component';
 import { CategoryListComponent } from './categories/category-list/category-list.component';
 import { SubcategoryCreateComponent } from './subcategories/subcategory-create/subcategory-create.component';
@@ -32,6 +33,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignUpComponent } from './auth/signup/signup.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserListComponent } from './users/user-list/user-list.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
     SignUpComponent,
     HeaderComponent,
     DialogComponent,
+    MessageComponent,
     CategoryCreateComponent,
     CategoryListComponent,
     SubcategoryCreateComponent,
@@ -67,7 +70,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
     HttpClientModule,
     AngularMaterialModule,
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
