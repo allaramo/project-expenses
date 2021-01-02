@@ -2,63 +2,56 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 //importing model and services needed
-import { Permission } from '../permission.model';
-import { PermissionServices } from '../permission.services';
+import { User } from '../user.model';
+import { UserServices } from '../user.services';
 import { RoleServices } from '../../roles/role.services';
-import { RouteServices } from '../../routes/route.services';
 
 @Component({
-  selector: 'permission-create',
-  templateUrl: './permission-create.component.html'
+  selector: 'user-create',
+  templateUrl: './user-create.component.html'
 })
-export class PermissionCreateComponent implements OnInit{
+export class UserCreateComponent implements OnInit{
   //flag to be used to show or hide progress spinner
   isLoading = false;
   //flag that indicates if the app is in mode add or edit
   private mode = 'add';
   private id: string;
-  permission : Permission;
-  //used to store the role and route list for dropbox
+  user : User;
+  //used to store the role list for dropbox
   roleList = [];
   role = null;
-  routeList = [];
-  route = null;
-  statusList = ['Allowed', 'Denied'];
+  statusList = ['Active','Inactive'];
   status = null;
+  show = false;
 
   //constructor with the services needed and the route
-  constructor(public permissionServices: PermissionServices, public roleServices: RoleServices, public routeServices: RouteServices, public router: ActivatedRoute) {}
+  constructor(public userServices: UserServices, public roleServices: RoleServices, public router: ActivatedRoute) {}
 
   //on init
   ngOnInit(){
     this.router.paramMap.subscribe((paramMap : ParamMap)=> {
       this.isLoading = true;
       //gets list of items for the dropbox
-      this.roleServices.getList().subscribe(rol=>{
+      this.roleServices.getList().subscribe(usr=>{
         this.isLoading = false;
-        this.roleList = rol.roles;
-      });
-      this.isLoading = true;
-      //gets list of items for the dropbox
-      this.routeServices.getList().subscribe(rou=>{
-        this.isLoading = false;
-        this.routeList = rou.routes;
+        this.roleList = usr.roles;
       });
       //if a parameter of id is found the app is editting
       if(paramMap.has('id')){
         this.mode = 'edit';
+        this.show = true;
         this.id = paramMap.get('id');
         //gets the information of the item that will be edited to fill the fields
-        this.permissionServices.getOne(this.id).subscribe(perm => {
+        this.userServices.getOne(this.id).subscribe(usr => {
           this.isLoading = false;
-          this.permission = {id: perm._id, role: perm.role, route: perm.route, status: perm.status}
-          this.role = perm.role;
-          this.route = perm.route;
-          this.status = perm.status === true ? "Allowed" : "Denied";
+          this.user = {id: usr._id, email: usr.email, password: usr.password, role: usr.role, status: usr.status, logged: usr.logged}
+          this.role = usr.role;
+          this.status = usr.status === true ? "Active" : "Inactive";
         });
       } else {
         this.mode = 'add';
         this.id = null;
+        this.show = false;
       }
     })
   }
@@ -72,10 +65,10 @@ export class PermissionCreateComponent implements OnInit{
     this.isLoading = true;
     if(this.mode === 'add'){
       //if the add mode is active calls the add service
-      this.permissionServices.add(form.value.role, form.value.route, form.value.status === "Allowed" ? true : false);
+      this.userServices.add(form.value.email, form.value.password, form.value.role, form.value.status === "Active" ? true : false);
     } else {
       //if the edit mode is active calls the edit service
-      this.permissionServices.update(this.id, form.value.role, form.value.route, form.value.status === "Allowed" ? true : false);
+      this.userServices.update(this.id, form.value.email, form.value.password, form.value.role, form.value.status === "Active" ? true : false, form.value.logged);
     }
     //resets form
     form.resetForm();
@@ -83,11 +76,12 @@ export class PermissionCreateComponent implements OnInit{
 
   //compares two objects. Used to select the correct value on the dropbox in edit mode
   compareObjects(o1: any, o2: any): boolean {
-    return o1?.name === o2?.name && o1?.id === o2?.id && o1?.path === o2?.path;
+    return o1?.name === o2?.name && o1.id === o2.id;
   }
 
   compareObjects2(o1: any, o2: any): boolean {
     return o1 === o2;
   }
+
 
 }

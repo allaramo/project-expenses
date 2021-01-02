@@ -3,9 +3,32 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <!-- creates form with fields. On edit mode fills the fields with ngModel -->
   <form
-  (submit)="saveData(permForm)"
-  #permForm="ngForm"
+  (submit)="saveData(usrForm)"
+  #usrForm="ngForm"
   *ngIf="!isLoading">
+    <mat-form-field>
+      <input
+      type="email"
+      matInput
+      name="email"
+      required
+      email
+      placeholder="Email"
+      [ngModel]="user?.email"
+      #name="ngModel">
+      <mat-error >Please enter a valid Email</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="password"
+      matInput
+      name="password"
+      required
+      placeholder="Password"
+      [ngModel]="user?.password"
+      #name="ngModel">
+      <mat-error >Please enter a valid Password</mat-error>
+    </mat-form-field>
     <mat-form-field>
       <mat-label>Select Role</mat-label>
       <mat-select name="role"  [compareWith]="compareObjects" [(ngModel)]="role" required>
@@ -14,18 +37,22 @@
       <mat-error >Please select a Role</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Select Route</mat-label>
-      <mat-select name="route"  [compareWith]="compareObjects" [(ngModel)]="route" required>
-        <mat-option  *ngFor="let route of routeList" [value]="route">{{route.path}}</mat-option>
-      </mat-select>
-      <mat-error >Please select a Route</mat-error>
-    </mat-form-field>
-    <mat-form-field>
       <mat-label>Select a Status</mat-label>
       <mat-select name="status"  [compareWith]="compareObjects2" [(ngModel)]="status" required>
         <mat-option  *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
       </mat-select>
       <mat-error >Please select a Status</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="show">
+      <input
+      type="text"
+      matInput
+      disabled
+      name="logged"
+      required
+      placeholder="Logged"
+      [ngModel]="user?.logged"
+      #name="ngModel">
     </mat-form-field>
     <mat-card-actions>
       <!-- displays buttons of cancel and save -->
@@ -33,7 +60,7 @@
       mat-raised-button
       color="primary"
       type="submit"><mat-icon>save</mat-icon> SAVE</button>
-      <a mat-raised-button color="warn" routerLink="/permission" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+      <a mat-raised-button color="warn" routerLink="/user" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
     </mat-card-actions>
   </form>
 </mat-card>

@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
 //importing components
+import { LoginComponent } from './auth/login/login.component';
+import { SignUpComponent } from './auth/signup/signup.component';
 import { CategoryCreateComponent } from './categories/category-create/category-create.component';
 import { CategoryListComponent } from './categories/category-list/category-list.component';
 import { SubcategoryCreateComponent } from './subcategories/subcategory-create/subcategory-create.component';
@@ -17,9 +19,12 @@ import { RouteCreateComponent } from './routes/route-create/route-create.compone
 import { RouteListComponent } from './routes/route-list/route-list.component';
 import { PermissionCreateComponent } from './permissions/permission-create/permission-create.component';
 import { PermissionListComponent } from './permissions/permission-list/permission-list.component';
-
+import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserListComponent } from './users/user-list/user-list.component';
 //creating routes
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
+  {path: 'signup', component: SignUpComponent},
   {path: 'category', component: CategoryListComponent},
   {path: 'category/add', component: CategoryCreateComponent},
   {path: 'category/edit/:id', component: CategoryCreateComponent},
@@ -44,6 +49,9 @@ const routes: Routes = [
   {path: 'permission', component: PermissionListComponent},
   {path: 'permission/add', component: PermissionCreateComponent},
   {path: 'permission/edit/:id', component: PermissionCreateComponent},
+  {path: 'user', component: UserListComponent},
+  {path: 'user/add', component: UserCreateComponent},
+  {path: 'user/edit/:id', component: UserCreateComponent},
 ];
 
 @NgModule({

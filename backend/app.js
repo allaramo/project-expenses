@@ -9,6 +9,7 @@ const projectPhaseRoutes = require('./routes/project-phase.routes');
 const roleRoutes = require('./routes/role.routes');
 const routeRoutes = require('./routes/route.routes');
 const permissionRoutes = require('./routes/permission.routes');
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 
@@ -39,5 +40,6 @@ app.use('/projectphase', projectPhaseRoutes);
 app.use('/role', roleRoutes);
 app.use('/route', routeRoutes);
 app.use('/permission', permissionRoutes);
+app.use('/user', userRoutes);
 
 module.exports = app;

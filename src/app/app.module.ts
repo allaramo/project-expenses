@@ -28,10 +28,16 @@ import { RouteCreateComponent } from './routes/route-create/route-create.compone
 import { RouteListComponent } from './routes/route-list/route-list.component';
 import { PermissionCreateComponent } from './permissions/permission-create/permission-create.component';
 import { PermissionListComponent } from './permissions/permission-list/permission-list.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignUpComponent } from './auth/signup/signup.component';
+import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserListComponent } from './users/user-list/user-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
+    SignUpComponent,
     HeaderComponent,
     DialogComponent,
     CategoryCreateComponent,
@@ -49,7 +55,9 @@ import { PermissionListComponent } from './permissions/permission-list/permissio
     RouteCreateComponent,
     RouteListComponent,
     PermissionCreateComponent,
-    PermissionListComponent
+    PermissionListComponent,
+    UserCreateComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule,
