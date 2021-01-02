@@ -13,4 +13,11 @@
     <button mat-menu-item routerLink="/project">Projects</button>
     <button mat-menu-item routerLink="/projectphase">Project Phases</button>
   </mat-menu>
+  <button mat-button [matMenuTriggerFor]="sec">Security</button>
+  <mat-menu #sec="matMenu" yPosition="below">
+    <button mat-menu-item routerLink="/role">Roles</button>
+    <button mat-menu-item routerLink="/route">Routes</button>
+    <button mat-menu-item routerLink="/user">Users</button>
+    <button mat-menu-item routerLink="/permission">Permissions</button>
+  </mat-menu>
 </mat-toolbar>

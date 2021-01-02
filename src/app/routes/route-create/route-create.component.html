@@ -1,0 +1,29 @@
+<mat-card>
+  <!-- shows progress spinner if flag loading is true -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
+  <form
+  (submit)="saveData(rouForm)"
+  #rouForm="ngForm"
+  *ngIf="!isLoading">
+    <mat-form-field>
+      <input
+      type="text"
+      matInput
+      name="path"
+      required
+      placeholder="Path"
+      [ngModel]="route?.path"
+      #path="ngModel">
+      <mat-error >Please enter a path</mat-error>
+    </mat-form-field>
+    <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/route" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
+  </form>
+</mat-card>

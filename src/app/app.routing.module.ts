@@ -11,6 +11,13 @@ import { ProjectCreateComponent } from './projects/project-create/project-create
 import { ProjectListComponent } from './projects/project-list/project-list.component';
 import { ProjectPhaseCreateComponent } from './project-phases/project-phase-create/project-phase-create.component';
 import { ProjectPhaseListComponent } from './project-phases/project-phase-list/project-phase-list.component';
+import { RoleCreateComponent } from './roles/role-create/role-create.component';
+import { RoleListComponent } from './roles/role-list/role-list.component';
+import { RouteCreateComponent } from './routes/route-create/route-create.component';
+import { RouteListComponent } from './routes/route-list/route-list.component';
+import { PermissionCreateComponent } from './permissions/permission-create/permission-create.component';
+import { PermissionListComponent } from './permissions/permission-list/permission-list.component';
+
 //creating routes
 const routes: Routes = [
   {path: 'category', component: CategoryListComponent},
@@ -28,6 +35,15 @@ const routes: Routes = [
   {path: 'projectphase', component: ProjectPhaseListComponent},
   {path: 'projectphase/add', component: ProjectPhaseCreateComponent},
   {path: 'projectphase/edit/:id', component: ProjectPhaseCreateComponent},
+  {path: 'role', component: RoleListComponent},
+  {path: 'role/add', component: RoleCreateComponent},
+  {path: 'role/edit/:id', component: RoleCreateComponent},
+  {path: 'route', component: RouteListComponent},
+  {path: 'route/add', component: RouteCreateComponent},
+  {path: 'route/edit/:id', component: RouteCreateComponent},
+  {path: 'permission', component: PermissionListComponent},
+  {path: 'permission/add', component: PermissionCreateComponent},
+  {path: 'permission/edit/:id', component: PermissionCreateComponent},
 ];
 
 @NgModule({

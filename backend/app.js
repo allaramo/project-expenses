@@ -6,6 +6,10 @@ const subcategoryRoutes = require('./routes/subcategory.routes');
 const phaseRoutes = require('./routes/phase.routes');
 const projectRoutes = require('./routes/project.routes');
 const projectPhaseRoutes = require('./routes/project-phase.routes');
+const roleRoutes = require('./routes/role.routes');
+const routeRoutes = require('./routes/route.routes');
+const permissionRoutes = require('./routes/permission.routes');
+
 const app = express();
 
 const url = "mongodb+srv://aranu:zgkQsx7ZKFAvflvu@gtp.qwman.mongodb.net/proexp?retryWrites=true&w=majority";
@@ -32,5 +36,8 @@ app.use('/subcategory', subcategoryRoutes);
 app.use('/phase', phaseRoutes);
 app.use('/project', projectRoutes);
 app.use('/projectphase', projectPhaseRoutes);
+app.use('/role', roleRoutes);
+app.use('/route', routeRoutes);
+app.use('/permission', permissionRoutes);
 
 module.exports = app;

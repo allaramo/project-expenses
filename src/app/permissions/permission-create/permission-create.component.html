@@ -1,0 +1,39 @@
+<mat-card>
+  <!-- shows progress spinner if flag loading is true -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
+  <form
+  (submit)="saveData(permForm)"
+  #permForm="ngForm"
+  *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>Select Role</mat-label>
+      <mat-select name="role"  [compareWith]="compareObjects" [(ngModel)]="role" required>
+        <mat-option  *ngFor="let role of roleList" [value]="role">{{role.name}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Role</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Route</mat-label>
+      <mat-select name="route"  [compareWith]="compareObjects" [(ngModel)]="route" required>
+        <mat-option  *ngFor="let route of routeList" [value]="route">{{route.path}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Route</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select a Status</mat-label>
+      <mat-select name="status"  [compareWith]="compareObjects2" [(ngModel)]="status" required>
+        <mat-option  *ngFor="let status of statusList" [value]="status.value">{{status.text}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Status</mat-error>
+    </mat-form-field>
+    <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/permission" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
+  </form>
+</mat-card>
