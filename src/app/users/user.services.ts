@@ -67,6 +67,12 @@ export class UserServices {
     return this.http.get<{_id: string, email: string, password: string, role: Role, status: boolean, logged: boolean}>(this.url + id)
   }
 
+  //gets a list of items to fill for dropboxes
+  getList(){
+    //sends a get request
+    return this.http.get<{msg: string, users: any}>(this.url);
+  }
+
   //adds a new item
   add(email: string, password: string, role: Role, status: boolean){
     //uses the model to create a new object

@@ -34,6 +34,9 @@ import { SignUpComponent } from './auth/signup/signup.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { ExpenseCreateComponent } from './expenses/expense-create/expense-create.component';
+import { ExpenseListComponent } from './expenses/expense-list/expense-list.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 @NgModule({
   declarations: [
@@ -61,6 +64,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     PermissionListComponent,
     UserCreateComponent,
     UserListComponent,
+    ExpenseCreateComponent,
+    ExpenseListComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +75,9 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     HttpClientModule,
     AngularMaterialModule,
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

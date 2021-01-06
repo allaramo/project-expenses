@@ -1,0 +1,72 @@
+<mat-card>
+  <!-- shows progress spinner if flag loading is true -->
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <!-- creates form with fields. On edit mode fills the fields with ngModel -->
+  <form
+  (submit)="saveData(expForm)"
+  #expForm="ngForm"
+  *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="date" [(ngModel)]="startDate" name="date" required>
+      <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+      <mat-datepicker #date></mat-datepicker>
+      <mat-error >Please enter a percentage</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+      type="number"
+      matInput
+      name="total"
+      required
+      min="0"
+      placeholder="Total"
+      [ngModel]="expense?.total"
+      #name="ngModel">
+      <mat-error >Please enter the Total</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Category</mat-label>
+      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category" required>
+        <mat-option  *ngFor="let category of categoryList" [value]="category">{{category.name}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Category</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Subcategory</mat-label>
+      <mat-select name="subcategory"  [compareWith]="compareObjects" [(ngModel)]="subcategory" required>
+        <mat-option  *ngFor="let subcategory of subcategoryList" [value]="subcategory">{{subcategory.name}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Subcategory</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Project</mat-label>
+      <mat-select name="project"  [compareWith]="compareObjects" [(ngModel)]="project" required>
+        <mat-option  *ngFor="let project of projectList" [value]="project">{{project.name}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Project</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Phase</mat-label>
+      <mat-select name="phase"  [compareWith]="compareObjects2" [(ngModel)]="phase" required>
+        <mat-option  *ngFor="let phase of phaseList" [value]="phase">{{phase.description}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Phase</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select User</mat-label>
+      <mat-select name="user"  [compareWith]="compareObjects3" [(ngModel)]="user" required>
+        <mat-option  *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
+      </mat-select>
+      <mat-error >Please select a Phase</mat-error>
+    </mat-form-field>
+    <mat-card-actions>
+      <!-- displays buttons of cancel and save -->
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"><mat-icon>save</mat-icon> SAVE</button>
+      <a mat-raised-button color="warn" routerLink="/expense" routerLinkActive="mat-accent"><mat-icon>cancel</mat-icon> CANCEL</a>
+    </mat-card-actions>
+  </form>
+</mat-card>

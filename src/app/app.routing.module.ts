@@ -22,6 +22,9 @@ import { PermissionListComponent } from './permissions/permission-list/permissio
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { AuthGuard } from "./auth/auth.guard";
+import { ExpenseCreateComponent } from "./expenses/expense-create/expense-create.component";
+import { ExpenseListComponent } from "./expenses/expense-list/expense-list.component";
+
 //creating routes
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -53,6 +56,9 @@ const routes: Routes = [
   {path: 'user', component: UserListComponent, canActivate: [AuthGuard]},
   {path: 'user/add', component: UserCreateComponent, canActivate: [AuthGuard]},
   {path: 'user/edit/:id', component: UserCreateComponent, canActivate: [AuthGuard]},
+  {path: 'expense', component: ExpenseListComponent, canActivate: [AuthGuard]},
+  {path: 'expense/add', component: ExpenseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'expense/edit/:id', component: ExpenseCreateComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

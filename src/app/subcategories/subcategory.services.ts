@@ -64,6 +64,12 @@ export class SubcategoryServices {
     return this.http.get<{_id: string, name: string, category: Category}>(this.url + id)
   }
 
+  //gets a list of items to fill for dropboxes
+  getList(){
+    //sends a get request
+    return this.http.get<{msg: string, subcategories: any}>(this.url);
+  }
+
   //adds a new item
   add(name: string, category: Category){
     //uses the model to create a new object
