@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-//importing model and services needed
+//imports model and services
 import { Expense } from '../expense.model';
 import { ExpenseServices } from '../expense.services';
 import { CategoryServices } from '../../categories/category.services';
@@ -9,19 +10,37 @@ import { SubcategoryServices } from 'src/app/subcategories/subcategory.services'
 import { ProjectServices } from '../../projects/project.services';
 import { ProjectPhaseServices } from 'src/app/project-phases/project-phase.services';
 import { UserServices } from 'src/app/users/user.services';
+//imports material table data source module
+import { MatTableDataSource } from '@angular/material/table';
+//imports page event for pagination on table
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'expense-create',
-  templateUrl: './expense-create.component.html'
+  selector: 'expense-report',
+  templateUrl: './expense-report.Component.html'
 })
-export class ExpenseCreateComponent implements OnInit{
-  //flag to be used to show or hide progress spinner
+export class ExpenseReportComponent implements OnInit, OnDestroy {
+  //to store the array of objects
+  expenses: Expense[] = [];
+  //a flag used to show or hide the progress spinner
   isLoading = false;
-  //flag that indicates if the app is in mode add or edit
-  private mode = 'add';
-  private id: string;
-  startDate = null;
-  expense : Expense;
+  //a flag used to show or hide the table
+  searchComplete = false;
+  //for pagination
+  length = 0;
+  pageSize = 100;
+  page = 1;
+  //for subscription
+  private sub : Subscription;
+  //array of headers to be shown
+  displayedColumns: string[] = ['date','project','phase','category','subcategory','user','total','id'];
+  //holds the data to be shown on the table
+  dataSource = new MatTableDataSource(this.expenses);
+
+  //used for datatimepickers
+  initialDate = null;
+  finalDate = null;
+
   //used to store the lists for dropboxs
   categoryList = [];
   category = null;
@@ -37,7 +56,7 @@ export class ExpenseCreateComponent implements OnInit{
   user = null;
   projectPhase = null;
 
-  //constructor with the services needed and the route
+  //constructor using services and dialog for delete event
   constructor(
     public expenseServices: ExpenseServices,
     public categoryServices: CategoryServices,
@@ -46,9 +65,9 @@ export class ExpenseCreateComponent implements OnInit{
     public projectPhaseServices: ProjectPhaseServices,
     public userServices: UserServices,
     public route: ActivatedRoute
-  ) {}
+  ){}
 
-  //on init
+  //on init gets all data to be shown on table
   ngOnInit(){
     this.route.paramMap.subscribe((paramMap : ParamMap)=> {
       this.isLoading = true;
@@ -82,87 +101,54 @@ export class ExpenseCreateComponent implements OnInit{
         this.isLoading = false;
         this.userList = usr.users;
       });
-      //if a parameter of id is found the app is editting
-      if(paramMap.has('id')){
-        this.mode = 'edit';
-        this.id = paramMap.get('id');
-        //gets the information of the item that will be edited to fill the fields
-        this.expenseServices.getOne(this.id).subscribe(exp => {
-          this.isLoading = false;
-          this.expense = {
-            id: exp._id,
-            date: exp.date,
-            total: exp.total,
-            category: exp.category,
-            subcategory: exp.subcategory,
-            project: exp.project,
-            phase: exp.phase,
-            projectPhase: exp.projectPhase,
-            user: exp.user
-           }
-          this.category = exp.category;
-          this.subcategory = exp.subcategory;
-          this.project = exp.project;
-          this.phase = exp.phase;
-          this.user = exp.user;
-          this.startDate = exp.date;
-        });
-      } else {
-        this.mode = 'add';
-        this.id = null;
-        this.startDate = new Date();
-      }
+      this.initialDate = new Date();
+      this.finalDate = new Date();
+
+      this.isLoading = true;
+      //calls the getall service to retrieve all data sending pagination parameters
+      this.expenseServices.getAll(this.pageSize,this.page);
+      //calls the update service and subscribes
+      this.sub = this.expenseServices.getUpdate().subscribe((results: { data: Expense[], count: number })=>{
+        this.isLoading = false;
+        this.expenses = results.data;
+        this.length = results.count;
+        //fills the datasource for the table
+        this.dataSource = new MatTableDataSource(this.expenses);
+        //creates a new predicate used to filter the table
+        this.dataSource.filterPredicate = (data, filter) => {
+          //a variable with all information used to search on it
+          const dataStr = data.project.name + data.phase.description + data.category.name + data.subcategory.name + data.user.email + data.total + data.date;
+          //lowercases filters and data to find a match
+          return dataStr.trim().toLowerCase().indexOf(filter.trim().toLowerCase()) != -1;
+        }
+      });
     })
   }
 
-  //saves the data using the fields of the form
-  saveData(form: NgForm){
-    //if the form is invalid does nothing
-    if(form.invalid){
-      return;
-    }
+  //once is destroyed it unsubscribes
+  ngOnDestroy(){
+    this.sub.unsubscribe();
+  }
+
+  //if a filter is aplied the datasource looks for the keywords entered
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue;
+  }
+
+  onNewSearch(){
+    this.searchComplete = false;
+  }
+
+  searchData(form: NgForm){
+    this.searchComplete = true;
+  }
+
+  //when a paginate event ocurrs calls the get all service with the new pagination parameters
+  onPaginate(pageData : PageEvent){
     this.isLoading = true;
-    if(this.mode === 'add'){
-      //if the add mode is active calls the add service
-      this.expenseServices.add(
-        form.value.date,
-        form.value.total,
-        form.value.category,
-        form.value.subcategory,
-        form.value.project,
-        form.value.phase,
-        this.projectPhase,
-        form.value.user
-      );
-    } else {
-      //if the edit mode is active calls the edit service
-      this.expenseServices.update(
-        this.id,
-        form.value.date,
-        form.value.total,
-        form.value.category,
-        form.value.subcategory,
-        form.value.project,
-        form.value.phase,
-        this.projectPhase,
-        form.value.user
-      );
-    }
-    //resets form
-    form.resetForm();
-  }
-
-  //compares two objects. Used to select the correct value on the dropbox in edit mode
-  compareObjects(o1: any, o2: any): boolean {
-    return o1?.name === o2?.name && o1?.id === o2?.id
-  }
-
-  compareObjects2(o1: any, o2: any): boolean {
-    return o1?.description === o2?.description && o1?.id === o2?.id
-  }
-
-  compareObjects3(o1: any, o2: any): boolean {
-    return o1?.email === o2?.email && o1?.id === o2?.id
+    this.page = pageData.pageIndex + 1;
+    this.pageSize = pageData.pageSize;
+    this.expenseServices.getAll(this.pageSize,this.page);
   }
 
   onChangeCat(value: Object){

@@ -24,6 +24,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { AuthGuard } from "./auth/auth.guard";
 import { ExpenseCreateComponent } from "./expenses/expense-create/expense-create.component";
 import { ExpenseListComponent } from "./expenses/expense-list/expense-list.component";
+import { ExpenseReportComponent } from "./expenses/expense-report/expense-report.component";
 
 //creating routes
 const routes: Routes = [
@@ -59,6 +60,7 @@ const routes: Routes = [
   {path: 'expense', component: ExpenseListComponent, canActivate: [AuthGuard]},
   {path: 'expense/add', component: ExpenseCreateComponent, canActivate: [AuthGuard]},
   {path: 'expense/edit/:id', component: ExpenseCreateComponent, canActivate: [AuthGuard]},
+  {path: 'expense-report', component: ExpenseReportComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

@@ -36,6 +36,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { ExpenseCreateComponent } from './expenses/expense-create/expense-create.component';
 import { ExpenseListComponent } from './expenses/expense-list/expense-list.component';
+import { ExpenseReportComponent } from './expenses/expense-report/expense-report.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core'
     UserCreateComponent,
     UserListComponent,
     ExpenseCreateComponent,
-    ExpenseListComponent
+    ExpenseListComponent,
+    ExpenseReportComponent
   ],
   imports: [
     BrowserModule,

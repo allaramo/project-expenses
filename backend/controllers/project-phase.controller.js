@@ -1,5 +1,6 @@
 //imports model
 const ProjectPhase = require('../models/project-phase.model');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 //retrieves all items
 exports.getAll = (req, res, next)=>{
@@ -50,11 +51,49 @@ exports.add = (req, res, next) => {
     status: req.body.status,
     order: req.body.order
   });
-  //saves the data
-  projectPhase.save().then(created=>{
-    res.status(201).json({
-      msg: 'New Project Phase added', id: created._id
-    });
+  //validates sum is not more than 1
+  ProjectPhase.aggregate([
+    {
+      $match:
+      {
+        project : ObjectId(req.body.project._id)
+      }
+    },
+    {
+      $group:
+      {
+        _id: {project: "$project"},
+        sum: {$sum: "$percentage"}
+      },
+    },
+    {
+      $project:
+        {
+          _id: 0,
+          total: "$sum"
+        }
+    }
+  ])
+  .then(agg=>{
+    if(agg.length>0){
+      if(agg[0].total+req.body.percentage>100){
+        res.status(200).json({
+          error: "Percentage not valid. The sum of the project's phases percentages exceed 100%", id: null
+        });
+      } else {
+        projectPhase.save().then(created=>{
+          res.status(201).json({
+            msg: 'New Project Phase added', id: created._id
+          });
+        });
+      }
+    } else {
+      projectPhase.save().then(created=>{
+        res.status(201).json({
+          msg: 'New Project Phase added', id: created._id
+        });
+      });
+    }
   });
 }
 
@@ -68,10 +107,53 @@ exports.update = (req, res, next)=> {
     status: req.body.status,
     order: req.body.order
   })
-  //updates the data
-  ProjectPhase.updateOne({_id: req.params.id}, projectPhase).then(result=>{
-    res.status(200).json({msg: "Project Phase updated"});
+  let lastPercentage = 0;
+  ProjectPhase.findById(req.body.id)
+  .then(doc => {
+    lastPercentage = doc.percentage;
+    ProjectPhase.aggregate([
+      {
+        $match:
+        {
+          project : ObjectId(req.body.project._id)
+        }
+      },
+      {
+        $group:
+        {
+          _id: {project: "$project"},
+          sum: {$sum: "$percentage"}
+        },
+      },
+      {
+        $project:
+          {
+            _id: 0,
+            total: "$sum"
+          }
+      }
+    ])
+    .then(agg=>{
+      if(agg.length>0){
+        if(agg[0].total+req.body.percentage-lastPercentage>100){
+          res.status(200).json({
+            error: "Percentage not valid. The sum of the project's phases percentages exceed 100%"
+          });
+        } else {
+          //updates the data
+          ProjectPhase.updateOne({_id: req.params.id}, projectPhase).then(result=>{
+            res.status(200).json({msg: "Project Phase updated"});
+          });
+        }
+      } else {
+        //updates the data
+        ProjectPhase.updateOne({_id: req.params.id}, projectPhase).then(result=>{
+          res.status(200).json({msg: "Project Phase updated"});
+        });
+      }
+    });
   });
+
 }
 
 //deletes the item selected by its id

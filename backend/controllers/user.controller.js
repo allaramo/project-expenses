@@ -146,16 +146,37 @@ exports.add = (req, res, next) => {
 
 //updates the item selected by its id, based on its model
 exports.update = (req, res, next)=> {
-  const user = new User({
-    _id: req.body.id,
-    password: req.body.password,
-    role: req.body.role._id,
-    status: req.body.status
+  let pass = null;
+  User.findById(req.params.id).populate("role").then(doc => {
+    if(doc){
+      if(doc.password != req.body.password){
+        bcrypt.hash(req.body.password, 10)
+        .then(hash => {
+          const user = new User({
+            _id: req.body.id,
+            password: hash,
+            role: req.body.role._id,
+            status: req.body.status
+          })
+          //updates the data
+          User.updateOne({_id: req.params.id}, user).then(result=>{
+            res.status(200).json({msg: "User updated"});
+          });
+        });
+      } else {
+        const user = new User({
+          _id: req.body.id,
+          password: req.body.password,
+          role: req.body.role._id,
+          status: req.body.status
+        })
+        //updates the data
+        User.updateOne({_id: req.params.id}, user).then(result=>{
+          res.status(200).json({msg: "User updated"});
+        });
+      }
+    }
   })
-  //updates the data
-  User.updateOne({_id: req.params.id}, user).then(result=>{
-    res.status(200).json({msg: "User updated"});
-  });
 }
 
 //deletes the item selected by its id

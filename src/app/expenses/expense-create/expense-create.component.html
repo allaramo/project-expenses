@@ -11,7 +11,7 @@
       <input matInput [matDatepicker]="date" [(ngModel)]="startDate" name="date" required>
       <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
       <mat-datepicker #date></mat-datepicker>
-      <mat-error >Please enter a percentage</mat-error>
+      <mat-error >Please enter a date</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input
@@ -27,7 +27,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Select Category</mat-label>
-      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category" required>
+      <mat-select name="category"  [compareWith]="compareObjects" [(ngModel)]="category" required (ngModelChange)="onChangeCat($event)">
         <mat-option  *ngFor="let category of categoryList" [value]="category">{{category.name}}</mat-option>
       </mat-select>
       <mat-error >Please select a Category</mat-error>
@@ -41,7 +41,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Select Project</mat-label>
-      <mat-select name="project"  [compareWith]="compareObjects" [(ngModel)]="project" required>
+      <mat-select name="project"  [compareWith]="compareObjects" [(ngModel)]="project" required (ngModelChange)="onChangePro($event)">
         <mat-option  *ngFor="let project of projectList" [value]="project">{{project.name}}</mat-option>
       </mat-select>
       <mat-error >Please select a Project</mat-error>
@@ -49,7 +49,7 @@
     <mat-form-field>
       <mat-label>Select Phase</mat-label>
       <mat-select name="phase"  [compareWith]="compareObjects2" [(ngModel)]="phase" required>
-        <mat-option  *ngFor="let phase of phaseList" [value]="phase">{{phase.description}}</mat-option>
+        <mat-option  *ngFor="let phase of phaseList" [value]="phase.phase">{{phase.phase.description}} ({{ phase.project.name }})</mat-option>
       </mat-select>
       <mat-error >Please select a Phase</mat-error>
     </mat-form-field>
@@ -58,7 +58,7 @@
       <mat-select name="user"  [compareWith]="compareObjects3" [(ngModel)]="user" required>
         <mat-option  *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
       </mat-select>
-      <mat-error >Please select a Phase</mat-error>
+      <mat-error >Please select a User</mat-error>
     </mat-form-field>
     <mat-card-actions>
       <!-- displays buttons of cancel and save -->

@@ -12,6 +12,9 @@ import { environment } from '../../environments/environment';
 import { Project } from '../projects/project.model';
 import { Phase } from '../phases/phase.model';
 import { ProjectPhase } from './project-phase.model';
+//imports dialog component and material module for delete confirmation
+import { MatDialog } from '@angular/material/dialog';
+import { MessageComponent } from "../message/message.component";
 
 //adding injectable
 @Injectable({providedIn: 'root'})
@@ -24,7 +27,7 @@ export class ProjectPhaseServices {
   private url = environment.apiURL+'/projectphase/';
 
   //constructor using the http client and the router
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, public dialog: MatDialog) {}
 
   //gets all the data paginated
   getAll(pageSize: number, page: number){
@@ -68,14 +71,26 @@ export class ProjectPhaseServices {
     return this.http.get<{_id: string, project: Project, phase: Phase, percentage: number, status: string, order: number}>(this.url + id)
   }
 
+   //gets a list of items to fill for dropboxes
+   getList(){
+    //sends a get request
+    return this.http.get<{msg: string, projectPhases: any}>(this.url);
+  }
+
   //adds a new item
   add(project: Project, phase: Phase, percentage: number, status: string, order: number){
     //uses the model to create a new object
     const projectPhase : ProjectPhase = {id: null, project: project, phase: phase, percentage: percentage, status: status, order: order};
     //sends a post request sending the object
-    this.http.post<{msg: string, id: string}>(this.url, projectPhase)
+    this.http.post<{msg: string, id: string, error: string}>(this.url, projectPhase)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
+      if(res.error){
+        this.dialog.open(MessageComponent, {
+          width: '350px',
+          data: res.error
+        });
+      }
       this.router.navigate(['/projectphase']);
     });
   }
@@ -85,9 +100,15 @@ export class ProjectPhaseServices {
     //uses the model to create a new object using the id and the fields changed
     const projectPhase : ProjectPhase = {id: id, project: project, phase: phase, percentage: percentage, status: status, order: order};
     //sends a put request using the id and the object
-    this.http.put(this.url + id, projectPhase)
+    this.http.put<{error: string}>(this.url + id, projectPhase)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
+      if(res.error){
+        this.dialog.open(MessageComponent, {
+          width: '350px',
+          data: res.error
+        });
+      }
       this.router.navigate(['/projectphase']);
     });
   }

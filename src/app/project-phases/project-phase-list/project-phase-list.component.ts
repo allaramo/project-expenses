@@ -22,7 +22,7 @@ export class ProjectPhaseListComponent implements OnInit, OnDestroy {
   isLoading = false;
   //for pagination
   length = 0;
-  pageSize = 5;
+  pageSize = 50;
   page = 1;
   //for subscription
   private sub : Subscription;
