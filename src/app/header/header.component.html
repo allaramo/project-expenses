@@ -1,5 +1,6 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/">ProjExp</a></span>
+  <span><a routerLink="/">PROJEXP</a></span>
+  <span *ngIf="email!=''"><h3> ( {{ email }} ) </h3></span>
   <span class="spacer"></span>
   <!-- displaying menu -->
   <button *ngIf="userAuthenticated" mat-button [matMenuTriggerFor]="cat">Categories</button>

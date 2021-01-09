@@ -40,10 +40,11 @@ exports.login = (req, res, next)=>{
   User.findOne({email: req.body.email})
   .then(user => {
     if(!user) {
-      return res.status(401).json({
+      return res.status(200).json({
         msg: "Authentication Failed",
-        error: "Wrong Email",
-        token: null
+        error: "Wrong Password or Email",
+        token: null,
+        email: null
       });
     }
     fetchedUser = user;
@@ -51,10 +52,19 @@ exports.login = (req, res, next)=>{
   })
   .then(result => {
     if(!result){
-      return res.status(401).json({
+      return res.status(200).json({
         msg: "Authentication Failed",
-        error: "Wrong Password",
-        token: null
+        error: "Wrong Password or Email",
+        token: null,
+        email: null
+      });
+    }
+    if(fetchedUser.status==false) {
+      return res.status(200).json({
+        msg: "Authentication Failed",
+        error: "Inactive User",
+        token: null,
+        email: null
       });
     }
     const token = jwt.sign(
@@ -62,18 +72,34 @@ exports.login = (req, res, next)=>{
        'MIRISTAMIDOPROPILDIMETILAMINA',
        {expiresIn: "1h"}
     );
-    res.status(200).json({
-      msg: "Authentication Successfully",
-      error: '',
-      token: token
-    })
+    User.updateOne({_id: fetchedUser._id},{logged: true}).then(result=>{
+      res.status(200).json({
+        msg: "Authentication Successfully",
+        error: '',
+        token: token,
+        email: req.body.email
+      })
+    });
   })
   .catch(err => {
-    return res.status(401).json({
+    return res.status(200).json({
       msg: "Authentication Failed",
       error: err,
-      token: null
+      token: null,
+      email: null
     });
+  });
+}
+
+//logouts and updates logged status
+exports.logout = (req, res, next)=>{
+  const token = req.headers.authorization.split(" ")[1];
+  const userId = jwt.verify(token, 'MIRISTAMIDOPROPILDIMETILAMINA').userId;
+  User.updateOne({_id: userId},{logged: false}).then(result=>{
+    res.status(200).json({
+      msg: "Logout Successful",
+      error: ''
+    })
   });
 }
 
@@ -146,7 +172,6 @@ exports.add = (req, res, next) => {
 
 //updates the item selected by its id, based on its model
 exports.update = (req, res, next)=> {
-  let pass = null;
   User.findById(req.params.id).populate("role").then(doc => {
     if(doc){
       if(doc.password != req.body.password){

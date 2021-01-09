@@ -9,6 +9,7 @@ import { AuthServices } from "../auth/auth.services";
 })
 export class HeaderComponent implements OnInit, OnDestroy{
   private authListenerSubs: Subscription;
+  email = "";
   //to enable or disable menus based on authentication
   userAuthenticated = false;
   constructor(private authService: AuthServices) {}
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
     .getAuthStatusListener()
     .subscribe(isAuth => {
       this.userAuthenticated = isAuth;
+      this.email = this.authService.getEmail();
     });
   }
 

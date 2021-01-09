@@ -10,6 +10,9 @@ router.post('/signup', controller.signUp);
 //login
 router.post('/login', controller.login);
 
+//logout
+router.post('/logout', controller.logout);
+
 //retrieves all data
 router.get('', auth, access, controller.getAll);
 

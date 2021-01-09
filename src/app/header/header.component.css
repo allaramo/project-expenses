@@ -12,3 +12,7 @@ a {
 .spacer {
   flex: 1 1 auto;
 }
+
+h3 {
+  padding-left: 1rem;
+}
