@@ -108,7 +108,7 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
       //calls the getall service to retrieve all data sending pagination parameters
       this.expenseServices.getAll(this.pageSize,this.page);
       //calls the update service and subscribes
-      this.sub = this.expenseServices.getUpdate().subscribe((results: { data: Expense[], count: number })=>{
+      this.sub = this.expenseServices.getReportUpdate().subscribe((results: { data: Expense[], count: number })=>{
         this.isLoading = false;
         this.expenses = results.data;
         this.length = results.count;
@@ -141,6 +141,11 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
 
   searchData(form: NgForm){
     this.searchComplete = true;
+
+    if(form.invalid){
+      return;
+    }
+    console.log(form.value.category);
   }
 
   //when a paginate event ocurrs calls the get all service with the new pagination parameters

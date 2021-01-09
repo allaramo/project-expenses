@@ -38,6 +38,7 @@ import { ExpenseCreateComponent } from './expenses/expense-create/expense-create
 import { ExpenseListComponent } from './expenses/expense-list/expense-list.component';
 import { ExpenseReportComponent } from './expenses/expense-report/expense-report.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core'
+import { ErrorInterceptor } from './error-interceptor';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core'
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   bootstrap: [AppComponent]
 })

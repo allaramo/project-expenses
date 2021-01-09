@@ -26,7 +26,7 @@ exports.signUp = (req, res, next)=>{
     })
     .catch(err => {
       res.status(500).json({
-        msg: 'Error: Sign Up Unsuccessful',
+        msg: 'Sign Up Unsuccessful. Try another email',
         id: null,
         error: err
       });
@@ -40,9 +40,9 @@ exports.login = (req, res, next)=>{
   User.findOne({email: req.body.email})
   .then(user => {
     if(!user) {
-      return res.status(200).json({
-        msg: "Authentication Failed",
-        error: "Wrong Password or Email",
+      return res.status(401).json({
+        msg: "Wrong Password or Email",
+        error: "Authentication Failed",
         token: null,
         email: null
       });
@@ -52,17 +52,17 @@ exports.login = (req, res, next)=>{
   })
   .then(result => {
     if(!result){
-      return res.status(200).json({
-        msg: "Authentication Failed",
-        error: "Wrong Password or Email",
+      return res.status(401).json({
+        msg: "Wrong Password or Email",
+        error: "Authentication Failed",
         token: null,
         email: null
       });
     }
     if(fetchedUser.status==false) {
-      return res.status(200).json({
-        msg: "Authentication Failed",
-        error: "Inactive User",
+      return res.status(403).json({
+        msg: "User has been disabled",
+        error: "Authentication Failed",
         token: null,
         email: null
       });
@@ -82,7 +82,7 @@ exports.login = (req, res, next)=>{
     });
   })
   .catch(err => {
-    return res.status(200).json({
+    return res.status(401).json({
       msg: "Authentication Failed",
       error: err,
       token: null,

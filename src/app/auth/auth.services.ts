@@ -26,12 +26,12 @@ export class AuthServices {
     const user : User = {id: null, email: email, password: password, role: null, status: false, logged: false};
 
     //sends a post request sending the object
-    this.http.post<{msg: string, id: string, error: string}>(this.url + '/signup/', user)
+    this.http.post<{msg: string, id: string, error: string}>(this.url + 'signup/', user)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
       const messageRef = this.dialog.open(MessageComponent, {
         width: '350px',
-        data: res.msg
+        data: res.error == '' ? res.msg : res.error
       });
       //once the dialog is closed...
       messageRef.afterClosed().subscribe(result => {
@@ -47,7 +47,7 @@ export class AuthServices {
     const user : User = {id: null, email: email, password: password, role: null, status: false, logged: false};
 
     //sends a post request sending the object
-    this.http.post<{msg: string, error: string, token: string, email: string}>(this.url + '/login/', user)
+    this.http.post<{msg: string, error: string, token: string, email: string}>(this.url + 'login/', user)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
       const messageRef = this.dialog.open(MessageComponent, {
@@ -95,7 +95,7 @@ export class AuthServices {
   logout(){
     //deleting token, setting to false listener and redirecting to homepage
     //sends a post request sending the object
-    this.http.post<{msg: string, error: string}>(this.url + '/logout/', this.token)
+    this.http.post<{msg: string, error: string}>(this.url + 'logout/', this.token)
     //subscribes and returns to the table's screen
     .subscribe(res=>{
       const messageRef = this.dialog.open(MessageComponent, {
@@ -106,9 +106,10 @@ export class AuthServices {
       this.email = "";
       this.isAuthenticated = false;
       this.authStatusListener.next(false);
+      this.router.navigate(['/']);
       //once the dialog is closed...
       messageRef.afterClosed().subscribe(result => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       });
     });
   }
