@@ -1,5 +1,6 @@
 //imports model
 const Expense = require('../models/expense.model');
+const ProjectPhase = require('../models/project-phase.model');
 
 //retrieves all items
 exports.getAll = (req, res, next)=>{
@@ -43,40 +44,106 @@ exports.getOne = (req, res, next)=> {
 
 //adds a new item based on model
 exports.add = (req, res, next) => {
-  const expense = new Expense({
-    date: req.body.date,
-    total: req.body.total,
-    category: req.body.category._id,
-    subcategory: req.body.subcategory._id,
-    project: req.body.project._id,
-    phase: req.body.phase._id,
-    //projectPhase: req.body.projectPhase._id,
-    user: req.body.user._id
-  });
-  //saves the data
-  expense.save().then(created=>{
-    res.status(201).json({
-      msg: 'New Expense added', id: created._id
-    });
+  //validates if combination of project and phase exists
+  ProjectPhase.findOne({$and: [{project: req.body.project}, {phase: req.body.phase}]}).populate("project")
+  .then(propha=>{
+    if(propha){
+      //if it exists proceeds to check if the total is acceptable
+      //by checking it doesn't surpass the budget allowed for that projectphase
+      //and the expenses already made
+      let budget = ((propha.percentage / 100) * propha.project.budget).toFixed(2);
+
+      Expense.find({$and: [{project: req.body.project}, {phase: req.body.phase}]})
+      .then(docs => {
+        let totalExpended = 0;
+        if(docs){
+          for(let exp of docs){
+            totalExpended += exp.total;
+          }
+        }
+        //if the budget minus the total expended minus the current expense to be added give a negative number
+        //it is out of budget and won't accept the new expense
+        if(budget-totalExpended-req.body.total<0){
+          res.status(404).json({
+            msg: 'Out of budget', id: null
+          });
+        } else {
+          const expense = new Expense({
+            date: req.body.date,
+            total: req.body.total,
+            category: req.body.category._id,
+            subcategory: req.body.subcategory._id,
+            project: req.body.project._id,
+            phase: req.body.phase._id,
+            projectPhase: propha._id,
+            user: req.body.user._id
+          });
+          //saves the data
+          expense.save().then(created=>{
+            res.status(201).json({
+              msg: 'New Expense added', id: created._id
+            });
+          });
+        }
+      });
+    } else {
+      res.status(404).json({
+        msg: 'Project Phase not valid', id: null
+      });
+    }
   });
 }
 
 //updates the item selected by its id, based on its model
 exports.update = (req, res, next)=> {
-  const expense = new Expense({
-    _id: req.body.id,
-    date: req.body.date,
-    total: req.body.total,
-    category: req.body.category._id,
-    subcategory: req.body.subcategory._id,
-    project: req.body.project._id,
-    phase: req.body.phase._id,
-    //projectPhase: req.body.projectPhase._id,
-    user: req.body.user._id
-  });
-  //updates the data
-  Expense.updateOne({_id: req.params.id}, expense).then(result=>{
-    res.status(200).json({msg: "Expense updated"});
+  ProjectPhase.findOne({$and: [{project: req.body.project}, {phase: req.body.phase}]}).populate("project")
+  .then(propha=>{
+    if(propha){
+      //if it exists proceeds to check if the total is acceptable
+      //by checking it doesn't surpass the budget allowed for that projectphase
+      //and the expenses already made
+      let budget = ((propha.percentage / 100) * propha.project.budget).toFixed(2);
+
+      Expense.find({$and: [{project: req.body.project}, {phase: req.body.phase}]})
+      .then(docs => {
+        let totalExpended = 0;
+        if(docs){
+          for(let exp of docs){
+            //discarts previous value to the sum
+            if(exp._id != req.body.id){
+              totalExpended += exp.total;
+            }
+          }
+        }
+        //if the budget minus the total expended minus the current expense to be added give a negative number
+        //it is out of budget and won't accept the new expense
+        if(budget-totalExpended-req.body.total<0){
+          res.status(404).json({
+            msg: 'Out of budget', id: null
+          });
+        } else {
+          const expense = new Expense({
+            _id: req.body.id,
+            date: req.body.date,
+            total: req.body.total,
+            category: req.body.category._id,
+            subcategory: req.body.subcategory._id,
+            project: req.body.project._id,
+            phase: req.body.phase._id,
+            projectPhase: propha._id,
+            user: req.body.user._id
+          });
+          //updates the data
+          Expense.updateOne({_id: req.params.id}, expense).then(result=>{
+            res.status(200).json({msg: "Expense updated"});
+          });
+        }
+      });
+    } else {
+      res.status(404).json({
+        msg: 'Project Phase not valid', id: null
+      });
+    }
   });
 }
 
@@ -87,3 +154,4 @@ exports.delete = (req, res, next)=>{
     res.status(200).json({msg: "Expense deleted"});
   });
 }
+

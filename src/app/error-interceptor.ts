@@ -4,12 +4,13 @@ import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { MessageComponent } from "./message/message.component";
-
+//importing router
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private router: Router) {}
   //intercepting requests
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     return next.handle(req).pipe(
@@ -25,6 +26,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           width: '350px',
           data: errorMessage
         });
+        //gets the current path
+        this.router.navigate(["/"+ req.url.split("/")[3]]);
         // throws error
         return throwError(error);
       })
