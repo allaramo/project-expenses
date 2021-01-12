@@ -44,6 +44,6 @@ app.use('/route', routeRoutes);
 app.use('/permission', permissionRoutes);
 app.use('/user', userRoutes);
 app.use('/expense', expenseRoutes);
-app.use('/report', reportRoutes);
+app.use('/expense-report', reportRoutes);
 
 module.exports = app;

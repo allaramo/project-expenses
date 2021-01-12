@@ -1,4 +1,4 @@
-<mat-card *ngIf="!searchComplete">
+<mat-card *ngIf="searchComplete">
   <!-- if the flag of loading is active shows the spinner -->
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <mat-card-title>PROJECT EXPENSES REPORT</mat-card-title>
@@ -65,76 +65,70 @@
     </mat-card-actions>
   </form>
 </mat-card>
-<mat-card *ngIf="searchComplete">
+<mat-card>
   <!-- if the flag of loading is active shows the spinner -->
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <mat-card-title>PROJECT EXPENSES REPORT</mat-card-title>
-  <!-- new item button that redirects to the creating screen -->
-  <mat-card-actions class="new-button">
-    <button mat-raised-button *ngIf="!isLoading && searchComplete" color="primary" (click)="onNewSearch()"><mat-icon>search</mat-icon> NEW SEARCH</button>
-  </mat-card-actions>
-  <mat-card-content class="mat-elevation-z8">
-    <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <!-- if a keyword is written calls the function to filter the table with that keyword -->
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. 2021-01-18" #input>
-    </mat-form-field>
-    <!-- uses dataSource to fill the table -->
-    <table mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.date | date: 'dd/MM/yyyy'}} </td>
-      </ng-container>
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let element"> {{element.category?.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="subcategory">
-        <th mat-header-cell *matHeaderCellDef> Subcategory </th>
-        <td mat-cell *matCellDef="let element"> {{element.subcategory?.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="project">
-        <th mat-header-cell *matHeaderCellDef> Project </th>
-        <td mat-cell *matCellDef="let element"> {{element.project?.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="phase">
-        <th mat-header-cell *matHeaderCellDef> Phase </th>
-        <td mat-cell *matCellDef="let element"> {{element.phase?.description}} </td>
-      </ng-container>
-      <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef> User </th>
-        <td mat-cell *matCellDef="let element"> {{element.user?.email}} </td>
-      </ng-container>
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef> Total </th>
-        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
-      </ng-container>
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <!-- adds edit and delete actions for each element -->
-          <a mat-icon-button color="primary" [routerLink]="['/expense/edit', element.id]"><mat-icon>edit</mat-icon></a>
-        </td>
-      </ng-container>
-      <!-- adds headers -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <!-- in case of no data that matches filter it displays a message -->
-        <td *ngIf="expenses.length > 0"class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-        <!-- in case of no data it displays a message -->
-        <td *ngIf="expenses.length == 0" class="mat-cell" colspan="4">No data was found</td>
-      </tr>
+  <div>
+    <table *ngFor="let pro of expenses">
+        <tr class="project">
+          <th>Project</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Budget %</th>
+          <th>Budget</th>
+          <th>Total Spent</th>
+          <th>Spent %</th>
+        </tr>
+        <tr>
+          <td>{{pro["project"]}}</td>
+          <td>{{pro["description"]}}</td>
+          <td>{{pro["status"]}}</td>
+          <td>100%</td>
+          <td>{{pro["budget"]}}</td>
+          <td>{{pro["total"]}}</td>
+          <td>{{pro["spent"]}}</td>
+        </tr>
+        <tbody *ngFor="let pha of pro['phases']">
+          <tr class="phase">
+            <th>Order</th>
+            <th>Phase</th>
+            <th>Status</th>
+            <th>Budget %</th>
+            <th>Budget</th>
+            <th>Total Spent</th>
+            <th>Spent %</th>
+          </tr>
+          <tr>
+            <td>{{pha["order"]}}</td>
+            <td>{{pha["phase"]}}</td>
+            <td>{{pha["status"]}}</td>
+            <td>{{pha["percentage"]}}</td>
+            <td>{{pha["budget"]}}</td>
+            <td>{{pha["total"]}}</td>
+            <td>{{pha["spent"]}}</td>
+          </tr>
+          <tr class="expense">
+            <th></th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>User</th>
+            <th>Total Spent</th>
+            <th>Spent %</th>
+          </tr>
+          <tr *ngFor="let exp of pha['expenses']">
+            <td></td>
+            <td>{{exp["date"]}}</td>
+            <td>{{exp["category"]}}</td>
+            <td>{{exp["subcategory"]}}</td>
+            <td>{{exp["user"]}}</td>
+            <td>{{exp["total"]}}</td>
+            <td>{{exp["spent"]}}</td>
+          </tr>
+        </tbody>
     </table>
-
-    <!-- shows paginator bar -->
-    <mat-paginator
-    *ngIf="expenses.length > 0"
-    [length]="length"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="[5, 10, 25, 50, 100]"
-    (page)="onPaginate($event)"></mat-paginator>
-  </mat-card-content>
+  </div>
 </mat-card>
 
 

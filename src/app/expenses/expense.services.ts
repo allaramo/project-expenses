@@ -26,7 +26,7 @@ export class ExpenseServices {
   private expensesReport : Object[] = [];
   //creating a new subject to collect the data retrieved and the counter of items
   private expensesUpdated = new Subject<{data: Expense[], count: number}>();
-  private expensesReportUpdated = new Subject<{data: Object[], count: number}>();
+  private expensesReportUpdated = new Subject<{data: Object[]}>();
   //prepares the url used for the http requests
   private url = environment.apiURL+'/expense/';
 
@@ -67,33 +67,30 @@ export class ExpenseServices {
     });
   }
 
-  getReport(data : any){
-    this.http.post<{msg: string, expenses: any, count: number}>(this.url+"report",data)
+  getReport(){
+    this.http.get<{msg: string, report}>(environment.apiURL+'/expense-report/')
     //maps the results to return a json with the message, the array of items and the counter
     .pipe(map(data=>{
       return {
         //maps the array of itmes
-        results : data.expenses.map(expense =>{
+        results : data.report.map(rep =>{
           return {
-            id: expense._id,
-            date: expense.date,
-            total: expense.total,
-            category: expense.category,
-            subcategory: expense.subcategory,
-            project: expense.project,
-            phase: expense.phase,
-            projectPhase: expense.projectPhase,
-            user: expense.user
+            project: rep.project,
+            description: rep.description,
+            status: rep.status,
+            budget: rep.budget,
+            total: rep.total,
+            spent: rep.spent,
+            phases: rep.phases
           }
-        }),
-        count: data.count
+        })
       };
     }))
     //subscribes to the data
-    .subscribe(expensesData=>{
-      this.expensesReport = expensesData.results;
+    .subscribe(repData=>{
+      this.expensesReport = repData.results;
       //updates the data
-      this.expensesReportUpdated.next({data: [...this.expensesReport], count: expensesData.count});
+      this.expensesReportUpdated.next({data: [...this.expensesReport]});
     });
   }
 

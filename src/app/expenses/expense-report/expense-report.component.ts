@@ -17,11 +17,12 @@ import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'expense-report',
-  templateUrl: './expense-report.Component.html'
+  templateUrl: './expense-report.component.html',
+  styleUrls: ['./expense-report.component.css']
 })
 export class ExpenseReportComponent implements OnInit, OnDestroy {
   //to store the array of objects
-  expenses: Expense[] = [];
+  expenses: Object[] = [];
   //a flag used to show or hide the progress spinner
   isLoading = false;
   //a flag used to show or hide the table
@@ -33,7 +34,7 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
   //for subscription
   private sub : Subscription;
   //array of headers to be shown
-  displayedColumns: string[] = ['date','project','phase','category','subcategory','user','total','id'];
+  displayedColumns: string[] = ['project','description','status','budget','total','spent','phase'];
   //holds the data to be shown on the table
   dataSource = new MatTableDataSource(this.expenses);
 
@@ -106,21 +107,14 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
 
       this.isLoading = true;
       //calls the getall service to retrieve all data sending pagination parameters
-      this.expenseServices.getAll(this.pageSize,this.page);
+      this.expenseServices.getReport(); //this.pageSize,this.page
       //calls the update service and subscribes
-      this.sub = this.expenseServices.getReportUpdate().subscribe((results: { data: Expense[], count: number })=>{
+      this.sub = this.expenseServices.getReportUpdate().subscribe((results: { data: Object[]})=>{
         this.isLoading = false;
         this.expenses = results.data;
-        this.length = results.count;
+        ////this.length = results.count;
         //fills the datasource for the table
         this.dataSource = new MatTableDataSource(this.expenses);
-        //creates a new predicate used to filter the table
-        this.dataSource.filterPredicate = (data, filter) => {
-          //a variable with all information used to search on it
-          const dataStr = data.project.name + data.phase.description + data.category.name + data.subcategory.name + data.user.email + data.total + data.date;
-          //lowercases filters and data to find a match
-          return dataStr.trim().toLowerCase().indexOf(filter.trim().toLowerCase()) != -1;
-        }
       });
     })
   }
@@ -128,11 +122,6 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
   //once is destroyed it unsubscribes
   ngOnDestroy(){
     this.sub.unsubscribe();
-  }
-
-  //if a filter is aplied the datasource looks for the keywords entered
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue;
   }
 
   onNewSearch(){
@@ -145,7 +134,6 @@ export class ExpenseReportComponent implements OnInit, OnDestroy {
     if(form.invalid){
       return;
     }
-    console.log(form.value.category);
   }
 
   //when a paginate event ocurrs calls the get all service with the new pagination parameters
