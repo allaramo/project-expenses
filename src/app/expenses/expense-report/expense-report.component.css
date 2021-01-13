@@ -15,16 +15,19 @@ th {
 td {
   color: rgba(0,0,0,.87);
   font-size: 14px !important;
+  text-align: right !important;
 }
 
 .project th {
   background-color: #141464 !important;
   color: ghostwhite !important;
 }
+
 .phase th {
   background-color: #2457a3 !important;
   color: ghostwhite !important;
 }
+
 .expense th {
   background-color: hsl(221, 24%, 55%) !important;
   color: ghostwhite !important;

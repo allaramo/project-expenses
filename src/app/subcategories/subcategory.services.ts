@@ -67,7 +67,7 @@ export class SubcategoryServices {
   //gets a list of items to fill for dropboxes
   getList(){
     //sends a get request
-    return this.http.get<{msg: string, subcategories: any}>(this.url);
+    return this.http.get<{msg: string, subcategories: any}>(environment.apiURL+'/lists/subcategory');
   }
 
   //adds a new item

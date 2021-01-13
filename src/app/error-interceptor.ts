@@ -26,8 +26,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           width: '350px',
           data: errorMessage
         });
-        //gets the current path
-        this.router.navigate(["/"+ req.url.split("/")[3]]);
+        if(errorMessage=='Access Forbidden'){
+          this.router.navigate(["/"]);
+        } else {
+          //gets the current path
+          this.router.navigate(["/"+ req.url.split("/")[3]]);
+        }
         // throws error
         return throwError(error);
       })

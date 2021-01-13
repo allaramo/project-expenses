@@ -12,6 +12,7 @@ const permissionRoutes = require('./routes/permission.routes');
 const userRoutes = require('./routes/user.routes');
 const expenseRoutes = require('./routes/expense.routes');
 const reportRoutes = require('./routes/report.routes');
+const listRoutes = require('./routes/lists.routes');
 
 const app = express();
 
@@ -45,5 +46,6 @@ app.use('/permission', permissionRoutes);
 app.use('/user', userRoutes);
 app.use('/expense', expenseRoutes);
 app.use('/expense-report', reportRoutes);
+app.use('/lists', listRoutes);
 
 module.exports = app;

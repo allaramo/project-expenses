@@ -66,7 +66,7 @@ export class CategoryServices {
   //gets a list of items to fill for dropboxes
   getList(){
     //sends a get request
-    return this.http.get<{msg: string, categories: any}>(this.url);
+    return this.http.get<{msg: string, categories: any}>(environment.apiURL+'/lists/category');
   }
 
   //adds a new item

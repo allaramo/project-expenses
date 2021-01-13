@@ -68,7 +68,7 @@ export class ProjectServices {
   //gets a list of items to fill for dropboxes
   getList(){
     //sends a get request
-    return this.http.get<{msg: string, projects: any}>(this.url);
+    return this.http.get<{msg: string, projects: any}>(environment.apiURL+'/lists/project');
   }
 
   //adds a new item

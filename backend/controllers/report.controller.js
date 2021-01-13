@@ -9,7 +9,6 @@ exports.getReport = (req, res, next) => {
   .populate("category subcategory project phase user projectPhase")
   .sort({project: 1, phase: 1, date: 1})
   .then(docs => {
-    console.log("1");
     let project = "";
     let phase = "";
     let totalByPhase = 0;
@@ -17,19 +16,15 @@ exports.getReport = (req, res, next) => {
     let i = -1;
     let j = -1;
     for(let pro of docs){
-      console.log("2");
       //if it finds a new project
       if(pro.project._id != project){
-        console.log("3");
         i += 1;
         j = -1;
         project = pro.project._id;
         //reinitializes accumulator for project and counts expenses for that project
         totalByProject = 0;
         for(let all of docs){
-          console.log("4");
           if(all.project._id==pro.project._id) {
-            console.log("5");
             totalByProject += all.total;
           }
         }
@@ -48,18 +43,14 @@ exports.getReport = (req, res, next) => {
 
         //starts looking phases of the project
         for(let pha of docs){
-          console.log("6");
           //if it finds a new phase
           if(pha.project._id==pro.project._id && pha.phase._id != phase){
-            console.log("7");
             j += 1;
             phase = pha.phase._id;
             //reinitializes accumulator for phase and counts expenses for that phase
             totalByPhase = 0;
             for(let all of docs){
-              console.log("8");
               if(all.project._id==pro.project._id && all.phase._id==pha.phase._id) {
-                console.log("9");
                 totalByPhase += all.total;
               }
             }
@@ -79,10 +70,8 @@ exports.getReport = (req, res, next) => {
 
             //starts looking expenses of the project
             for(let exp of docs){
-              console.log("10");
               //if it finds a new phase
               if(exp.project._id==pro.project._id && exp.phase._id == pha.phase._id){
-                console.log("11");
                 report[i]["phases"][j]["expenses"].push(
                   {
                     date: new Date(exp.date).toDateString(),
@@ -99,7 +88,6 @@ exports.getReport = (req, res, next) => {
         }
       }
     }
-    console.log("12");
     res.status(200).json({
       msg: "Report fetched successfully",
       report: report

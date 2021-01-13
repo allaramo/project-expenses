@@ -1,75 +1,11 @@
-<mat-card *ngIf="searchComplete">
-  <!-- if the flag of loading is active shows the spinner -->
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <mat-card-title>PROJECT EXPENSES REPORT</mat-card-title>
-  <!-- new item button that redirects to the creating screen -->
-  <form
-  (submit)="searchData(expForm)"
-  #expForm="ngForm"
-  *ngIf="!isLoading">
-    <mat-form-field>
-      <mat-label>Choose an initial date</mat-label>
-      <input matInput [matDatepicker]="idate" [(ngModel)]="initialDate" name="idate" required>
-      <mat-datepicker-toggle matSuffix [for]="idate"></mat-datepicker-toggle>
-      <mat-datepicker #idate></mat-datepicker>
-      <mat-error >Please enter a date</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Choose a final date</mat-label>
-      <input matInput [matDatepicker]="fdate" [(ngModel)]="finalDate" name="fdate" required>
-      <mat-datepicker-toggle matSuffix [for]="fdate"></mat-datepicker-toggle>
-      <mat-datepicker #fdate></mat-datepicker>
-      <mat-error >Please enter a date</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Select Category</mat-label>
-      <mat-select name="category" [(ngModel)]="category" (ngModelChange)="onChangeCat($event)">
-        <mat-option  *ngFor="let category of categoryList" [value]="category">{{category.name}}</mat-option>
-      </mat-select>
-      <mat-error >Please select a Category</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Select Subcategory</mat-label>
-      <mat-select name="subcategory">
-        <mat-option  *ngFor="let subcategory of subcategoryList" [value]="subcategory">{{subcategory.name}}</mat-option>
-      </mat-select>
-      <mat-error >Please select a Subcategory</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Select Project</mat-label>
-      <mat-select name="project" [(ngModel)]="project" (ngModelChange)="onChangePro($event)">
-        <mat-option  *ngFor="let project of projectList" [value]="project">{{project.name}}</mat-option>
-      </mat-select>
-      <mat-error >Please select a Project</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Select Phase</mat-label>
-      <mat-select name="phase">
-        <mat-option  *ngFor="let phase of phaseList" [value]="phase.phase">{{phase.phase.description}} ({{ phase.project.name }})</mat-option>
-      </mat-select>
-      <mat-error >Please select a Phase</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Select User</mat-label>
-      <mat-select name="user">
-        <mat-option  *ngFor="let user of userList" [value]="user">{{user.email}}</mat-option>
-      </mat-select>
-      <mat-error >Please select a User</mat-error>
-    </mat-form-field>
-    <mat-card-actions>
-      <!-- displays search button -->
-      <button
-      mat-raised-button
-      color="primary"
-      type="submit"><mat-icon>search</mat-icon> SEARCH</button>
-    </mat-card-actions>
-  </form>
-</mat-card>
 <mat-card>
+  <mat-card-actions class="new-button">
+    <button mat-raised-button color="primary" (click)="downloadPDF()"><mat-icon>save</mat-icon> SAVE TO PDF</button>
+  </mat-card-actions>
+  <div id="content">
   <!-- if the flag of loading is active shows the spinner -->
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <mat-card-title>PROJECT EXPENSES REPORT</mat-card-title>
-  <div>
+    <mat-card-title>PROJECT EXPENSES REPORT</mat-card-title>
     <table *ngFor="let pro of expenses">
         <tr class="project">
           <th>Project</th>

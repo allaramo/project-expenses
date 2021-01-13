@@ -70,7 +70,7 @@ export class UserServices {
   //gets a list of items to fill for dropboxes
   getList(){
     //sends a get request
-    return this.http.get<{msg: string, users: any}>(this.url);
+    return this.http.get<{msg: string, users: any}>(environment.apiURL+'/lists/user');
   }
 
   //adds a new item

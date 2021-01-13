@@ -74,7 +74,7 @@ export class ProjectPhaseServices {
    //gets a list of items to fill for dropboxes
    getList(){
     //sends a get request
-    return this.http.get<{msg: string, projectPhases: any}>(this.url);
+    return this.http.get<{msg: string, projectPhases: any}>(environment.apiURL+'/lists/projectphase');
   }
 
   //adds a new item
