@@ -69,7 +69,7 @@ exports.login = (req, res, next)=>{
     }
     const token = jwt.sign(
       { email: fetchedUser.email, userId: fetchedUser._id },
-       'MIRISTAMIDOPROPILDIMETILAMINA',
+       process.env.TOKEN,
        {expiresIn: "1h"}
     );
     User.updateOne({_id: fetchedUser._id},{logged: true}).then(result=>{
@@ -94,7 +94,7 @@ exports.login = (req, res, next)=>{
 //logouts and updates logged status
 exports.logout = (req, res, next)=>{
   const token = req.headers.authorization.split(" ")[1];
-  const userId = jwt.verify(token, 'MIRISTAMIDOPROPILDIMETILAMINA').userId;
+  const userId = jwt.verify(token, process.env.TOKEN).userId;
   User.updateOne({_id: userId},{logged: false}).then(result=>{
     res.status(200).json({
       msg: "Logout Successful",

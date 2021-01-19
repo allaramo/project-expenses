@@ -16,7 +16,7 @@ const listRoutes = require('./routes/lists.routes');
 
 const app = express();
 
-const url = "mongodb+srv://aranu:zgkQsx7ZKFAvflvu@gtp.qwman.mongodb.net/proexp?retryWrites=true&w=majority";
+const url = process.env.MONGO;
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 .then(()=>{
   console.log("Connected to DB");

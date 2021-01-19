@@ -46,4 +46,5 @@ testem.log
 Thumbs.db
 
 #environment variables
+env.list
 nodemon.json

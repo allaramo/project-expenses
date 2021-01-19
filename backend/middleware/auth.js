@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   //using headers to get the token
   try{
     const token = req.headers.authorization.split(" ")[1];
-    jwt.verify(token, 'MIRISTAMIDOPROPILDIMETILAMINA');
+    jwt.verify(token, process.env.TOKEN);
     next();
   } catch (error){
     res.status(401).json({
