@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiURL: "http://projexp.us-east-2.elasticbeanstalk.com"
 };
